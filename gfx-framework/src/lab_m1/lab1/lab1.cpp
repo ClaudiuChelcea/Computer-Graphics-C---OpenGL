@@ -22,6 +22,8 @@ namespace Objects
     std::string SCREEN_QUAD_STRING = "screen_quad";
 };
 
+#define GRAVITY_PULL 0.75f
+
 class Vector3
 {
     public:
@@ -62,6 +64,11 @@ class Player
         std::string activeMesh = Objects::SPHERE_STRING;
         bool movingForward = false, movingBackward = false, movingRight = false, movingLeft = false, movingUp = false, movingDown = false;
         float movingZ_speed = 0.5f, movingX_speed = 0.5f, movingY_speed = 0.5f;
+        bool jump = false;
+        float jumpForce = 0.01f;
+        float heightLimitUp = 1.0f, heightLimitDown = 0.0f, goUpFrom = 0.0f, goDownFrom = 1.0f;
+        bool haveToGoDown = false;
+        bool ascending = false;
 } player_1;
 
 
@@ -186,6 +193,27 @@ void Lab1::Update(float deltaTimeSeconds)
 
     // Render the object again but with different properties
     RenderMesh(meshes[player_1.activeMesh], glm::vec3(player_1.position.x, player_1.position.y, player_1.position.z));
+
+    // Jump mechanic for player
+    if (player_1.jump == true) {
+        if (player_1.goUpFrom <= player_1.heightLimitUp) {
+            player_1.goUpFrom += deltaTimeSeconds;
+            player_1.position.y = player_1.position.y + player_1.goUpFrom * player_1.jumpForce;
+            if ((player_1.jumpForce - deltaTimeSeconds / 10) > 0.01f)
+               player_1.jumpForce = player_1.jumpForce - deltaTimeSeconds / 10;
+            player_1.ascending = true;
+        }
+        else {
+            player_1.goUpFrom = 0;
+            player_1.jump = false;
+            player_1.ascending = false;
+        }
+    }
+
+    // GRAVITY
+    if (player_1.position.y > 0.0f && player_1.ascending == false) {
+        player_1.position.y -= GRAVITY_PULL * deltaTimeSeconds;
+    }
 }
 
 
@@ -292,6 +320,13 @@ void Lab1::OnKeyPress(int key, int mods)
     if (key == GLFW_KEY_E) {
         player_1.movingDown = true;
     }
+
+    // Jump
+    // Add key press event
+    if (key == GLFW_KEY_SPACE) {
+        player_1.jump = true;
+        player_1.jumpForce = 0.08f;
+    }
 }
 
 
@@ -317,7 +352,6 @@ void Lab1::OnKeyRelease(int key, int mods)
         player_1.movingDown = false;
     }
 }
-
 
 void Lab1::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 {
