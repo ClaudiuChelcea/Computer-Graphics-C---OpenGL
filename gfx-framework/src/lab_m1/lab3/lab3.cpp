@@ -86,7 +86,10 @@ void Lab3::Update(float deltaTimeSeconds)
     // add them over there!
 
     modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Rotate(deltaTimeSeconds*400);
     modelMatrix *= transform2D::Translate(150, 250);
+    modelMatrix *= transform2D::Scale(1, 1);
+
     // TODO(student): Create animations by multiplying the current
     // transform matrix with the matrices you just implemented.
     // Remember, the last matrix in the chain will take effect first!
@@ -95,6 +98,8 @@ void Lab3::Update(float deltaTimeSeconds)
 
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(400, 250);
+    modelMatrix *= transform2D::Rotate(deltaTimeSeconds * 300);
+    modelMatrix *= transform2D::Scale(100 * deltaTimeSeconds, 100 * deltaTimeSeconds);
     // TODO(student): Create animations by multiplying the current
     // transform matrix with the matrices you just implemented
     // Remember, the last matrix in the chain will take effect first!
@@ -102,7 +107,9 @@ void Lab3::Update(float deltaTimeSeconds)
     RenderMesh2D(meshes["square2"], shaders["VertexColor"], modelMatrix);
 
     modelMatrix = glm::mat3(1);
-    modelMatrix *= transform2D::Translate(650, 250);
+    modelMatrix *= transform2D::Translate(20000*deltaTimeSeconds, 20000*deltaTimeSeconds);
+    modelMatrix *= transform2D::Scale(50 * deltaTimeSeconds, 50 * deltaTimeSeconds);
+    modelMatrix *= transform2D::Rotate(deltaTimeSeconds * 200);
     // TODO(student): Create animations by multiplying the current
     // transform matrix with the matrices you just implemented
     // Remember, the last matrix in the chain will take effect first!
