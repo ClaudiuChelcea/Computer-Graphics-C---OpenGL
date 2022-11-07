@@ -40,8 +40,7 @@ void Lab2::Init()
 
     // Create a mesh box using custom data
     {
-        vector<VertexFormat> vertices
-        {
+        vector<VertexFormat> vertices{
             VertexFormat(glm::vec3(0, 0, 1), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
             VertexFormat(glm::vec3(1, 0, 1), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
             VertexFormat(glm::vec3(0, 1, 1), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
@@ -49,12 +48,8 @@ void Lab2::Init()
             VertexFormat(glm::vec3(0, 0, 0), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
             VertexFormat(glm::vec3(1, 0, 0), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
             VertexFormat(glm::vec3(0, 1, 0), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
-            VertexFormat(glm::vec3(1, 1, 0), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),
-
-        };
-
-        vector<unsigned int> indices =
-        {
+            VertexFormat(glm::vec3(1, 1, 0), glm::vec3(1.0f, 0.5f, 0.31f),glm::vec3(0, 1, 0),glm::vec2(1)),};
+        vector<unsigned int> indices = {
             0, 1, 2,    // indices for first triangle
             1, 3, 2,    // indices for second triangle
             2, 3, 7,
@@ -66,9 +61,7 @@ void Lab2::Init()
             0, 4, 1,
             1, 4, 5,
             2, 6, 4,
-            0, 2, 4,
-        };
-
+            0, 2, 4, };
         meshes["cube_A"] = new Mesh("generated cube 1");
         meshes["cube_A"]->InitFromData(vertices, indices);
 
