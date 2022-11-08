@@ -34,6 +34,9 @@ void Tema1::Init()
 
     // Wings movement
     angularStepIncreasing = true;
+
+    // For randomization
+    srand(time(NULL));
 }
 
 void Tema1::FrameStart()
@@ -55,40 +58,42 @@ void Tema1::Update(float deltaTimeSeconds)
     // If the bird reaches the left side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getDuckWidth().first < 0) {
         // Go right
-        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());// *cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
+        
+        // After each bounce, update the travelling angle to create an unpredictible movement
+        my_duck_manager.getDuckAlive()->setTravellingAngle(rand() % 180);
     }
 
     // If the bird reaches the right side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first > resolution.x - my_duck_manager.getDuckAlive()->getDuckWidth().second) {
         // Go left
-        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());// *cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
+        // After each bounce, update the travelling angle to create an unpredictible movement
+        my_duck_manager.getDuckAlive()->setTravellingAngle(rand() % 180);
     }
 
     /* Calculate vertical position */
     // If the bird reaches the bottom of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getDuckHeight().first < 0) {
         // Go up
-        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+        //my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());// *sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
     }
 
     // If the bird reaches the top of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second > resolution.y - my_duck_manager.getDuckAlive()->getDuckHeight().second) {
         // Go down
-        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());// *sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
     }
-
-
-
-    //my_duck.getPositionOfBody() = glm::mat3(1);
-    //modelMatrix = transform2D::Translate(positionX, positionY);
-    // 
-    // 
     
     // Update position
     my_duck_manager.getDuckAlive()->setBodyPosition(
         std::make_pair(
-            my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed(),
-            my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed()));
+            my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed() * cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180),
+            my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed() * sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180)));
 
     // Render body
     modelMatrix = glm::mat3(1);

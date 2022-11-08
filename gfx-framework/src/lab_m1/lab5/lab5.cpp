@@ -7,7 +7,6 @@
 using namespace std;
 using namespace m1;
 
-
 /*
  *  To find out more about `FrameStart`, `Update`, `FrameEnd`
  *  and the order in which they are called, see `world.cpp`.
@@ -45,7 +44,17 @@ void Lab5::Init()
 
     // TODO(student): After you implement the changing of the projection
     // parameters, remove hardcodings of these parameters
-    projectionMatrix = glm::perspective(RADIANS(60), window->props.aspectRatio, 0.01f, 200.0f);
+
+    fov = 60;
+    zNear = 0.01f;
+    zFar = 200.0f;
+
+    projectionMatrix = glm::perspective(RADIANS(fov), window->props.aspectRatio, zNear, zFar);
+
+    left = 0.1;
+    right = 10;
+    bottom = 0.1;
+    top = 10;
 
 }
 
@@ -91,6 +100,22 @@ void Lab5::Update(float deltaTimeSeconds)
     // function uses the view matrix from the camera that you just
     // implemented, and the local projection matrix.
 
+    {
+        glm::mat4 modelMatrix = glm::mat4(1);
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(-5, 0.5f, 0));
+        modelMatrix = glm::rotate(modelMatrix, RADIANS(60.0f), glm::vec3(1, 0, 0));
+        RenderMesh(meshes["sphere"], shaders["Simple"], modelMatrix);
+    }
+
+
+    {
+        glm::mat4 modelMatrix = glm::mat4(1);
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(5, 0.5f, 2));
+        modelMatrix = glm::rotate(modelMatrix, RADIANS(90.0f), glm::vec3(0, 0, 1));
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(1.5f));
+        RenderMesh(meshes["sphere"], shaders["VertexNormal"], modelMatrix);
+    }
+
     // Render the camera target. This is useful for understanding where
     // the rotation point is, when moving in third-person camera mode.
     if (renderCameraTarget)
@@ -109,7 +134,7 @@ void Lab5::FrameEnd()
 }
 
 
-void Lab5::RenderMesh(Mesh * mesh, Shader * shader, const glm::mat4 & modelMatrix)
+void Lab5::RenderMesh(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix)
 {
     if (!mesh || !shader || !shader->program)
         return;
@@ -139,32 +164,32 @@ void Lab5::OnInputUpdate(float deltaTime, int mods)
 
         if (window->KeyHold(GLFW_KEY_W)) {
             // TODO(student): Translate the camera forward
-
+            camera->TranslateForward(deltaTime * cameraSpeed);
         }
 
         if (window->KeyHold(GLFW_KEY_A)) {
             // TODO(student): Translate the camera to the left
-
+            camera->TranslateRight(-deltaTime * cameraSpeed);
         }
 
         if (window->KeyHold(GLFW_KEY_S)) {
             // TODO(student): Translate the camera backward
-
+            camera->TranslateForward(-deltaTime * cameraSpeed);
         }
 
         if (window->KeyHold(GLFW_KEY_D)) {
             // TODO(student): Translate the camera to the right
-
+            camera->TranslateRight(deltaTime * cameraSpeed);
         }
 
         if (window->KeyHold(GLFW_KEY_Q)) {
             // TODO(student): Translate the camera downward
-
+            camera->TranslateUpward(-deltaTime * cameraSpeed);
         }
 
         if (window->KeyHold(GLFW_KEY_E)) {
             // TODO(student): Translate the camera upward
-
+            camera->TranslateUpward(deltaTime * cameraSpeed);
         }
     }
 
@@ -172,6 +197,40 @@ void Lab5::OnInputUpdate(float deltaTime, int mods)
     // variables you might need in the class header. Inspect this file
     // for any hardcoded projection arguments (can you find any?) and
     // replace them with those extra variables.
+
+    //modificare FoV
+
+    //pozitiv (un fel de zoom out)
+    if (window->KeyHold(GLFW_KEY_L)) {
+        fov += deltaTime * 50;
+        projectionMatrix = glm::perspective(RADIANS(fov), window->props.aspectRatio, zNear, zFar);
+    }
+
+    //negativ (un fel de zoom in)
+    if (window->KeyHold(GLFW_KEY_K)) {
+        fov -= deltaTime * 50;
+        projectionMatrix = glm::perspective(RADIANS(fov), window->props.aspectRatio, zNear, zFar);
+    }
+
+
+    //modificare latime & inaltime fereastra proiectie pt proiectia ortografica
+
+    //inaltime
+    if (window->KeyHold(GLFW_KEY_U))
+    {
+        right -= deltaTime * 0.2f;
+        top -= deltaTime * 0.1f;
+        projectionMatrix = glm::ortho(left, right, bottom, top, zNear, zFar);
+    }
+
+    //latime
+    if (window->KeyHold(GLFW_KEY_P))
+    {
+        right += deltaTime * 0.2f;
+        top += deltaTime * 0.1f;
+        projectionMatrix =  glm::perspective (-fov, -window->props.aspectRatio, zNear, zFar);
+    }
+
 
 }
 
@@ -184,6 +243,18 @@ void Lab5::OnKeyPress(int key, int mods)
         renderCameraTarget = !renderCameraTarget;
     }
     // TODO(student): Switch projections
+
+    //proiectie otografica
+    if (key == GLFW_KEY_O) {
+        projectionMatrix = glm::ortho(left, right, bottom * 2, top * 2, zNear, zFar);
+
+    }
+
+    //proiectie perspectiva
+    if (key == GLFW_KEY_P)
+    {
+        projectionMatrix = glm::perspective(RADIANS(fov), window->props.aspectRatio, zNear, zFar);
+    }
 
 }
 
@@ -208,6 +279,8 @@ void Lab5::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
             // TODO(student): Rotate the camera in first-person mode around
             // OX and OY using `deltaX` and `deltaY`. Use the sensitivity
             // variables for setting up the rotation speed.
+            camera->RotateFirstPerson_OX(-sensivityOX * deltaY);
+            camera->RotateFirstPerson_OY(-sensivityOY * deltaX);
 
         }
 
@@ -216,6 +289,8 @@ void Lab5::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
             // TODO(student): Rotate the camera in third-person mode around
             // OX and OY using `deltaX` and `deltaY`. Use the sensitivity
             // variables for setting up the rotation speed.
+            camera->RotateFirstPerson_OX(sensivityOX * deltaY);
+            camera->RotateFirstPerson_OY(sensivityOY * deltaX);
 
         }
     }

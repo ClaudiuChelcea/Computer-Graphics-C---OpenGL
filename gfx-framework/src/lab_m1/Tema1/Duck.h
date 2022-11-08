@@ -35,6 +35,9 @@ private:
 	float xSpeed{ 2.0f };
 	float ySpeed{ 1.0f };
 
+	// Direction
+	float travellingAngle = 45.0f;
+
 public:
 	// Constructor
 	Duck() = default;
@@ -74,6 +77,9 @@ public:
 	// Speed
 	float getXSpeed() { return xSpeed; }
 	float getYSpeed() { return ySpeed; }
+
+	// Direction
+	float getTravellingAngle() { return travellingAngle; }
 	
 	/* Setters */
 	// Body
@@ -83,6 +89,9 @@ public:
 	// Speed
 	void setXSpeed(float _xSpeed) { xSpeed = _xSpeed; }
 	void setYSpeed(float _ySpeed) { ySpeed = _ySpeed; }
+
+	// Direction
+	void setTravellingAngle(float _travellingAngle) {travellingAngle = _travellingAngle; }
 };
 
 #endif // __DUCK_H
