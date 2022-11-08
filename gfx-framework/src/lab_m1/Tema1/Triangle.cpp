@@ -16,9 +16,9 @@ Mesh* Triangle::CreateTriangle(const std::string& triangle_name, glm::vec3 Corne
     // Set vertices
     std::vector<VertexFormat> vertices =
     {
-        VertexFormat(Corner, color),
+        VertexFormat(Corner + glm::vec3(0, 0, 0), color),
         VertexFormat(Corner + glm::vec3(length, 0, 0), color),
-        VertexFormat(Corner + glm::vec3(length, length, 0), color),
+        VertexFormat(Corner + glm::vec3(0, length, 0), color),
     };
 
     std::vector<unsigned int> indices;

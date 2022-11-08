@@ -8,7 +8,7 @@
 
 #include "components/simple_scene.h"
 #include "lab_m1/Tema1/transform2D.h"
-#include "lab_m1/Tema1/Duck.h"
+#include "lab_m1/Tema1/Game Manager.h"
 
 namespace m1
 {
@@ -33,9 +33,9 @@ namespace m1
         void OnWindowResize(int width, int height) override;
 
     protected:
-        glm::mat3 modelMatrix;
         float angularStep;
-        Duck my_duck;
+        glm::mat3 modelMatrix;
+        GameManager::DuckManager my_duck_manager;
     };
 }   // namespace m1
 
