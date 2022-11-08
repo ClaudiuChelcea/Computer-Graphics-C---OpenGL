@@ -34,6 +34,7 @@ namespace m1
 
     protected:
         float angularStep;
+        bool angularStepIncreasing = true;
         glm::mat3 modelMatrix;
         GameManager::DuckManager my_duck_manager;
     };

@@ -4,13 +4,13 @@
 void Duck::createDuck()
 {
 	// Create body
-	this->body = Triangle::CreateTriangle("body", glm::vec3 (0.0f, 0.0f, 0.0f), 80.0f, glm::vec3(0.0, 0.74f, 1.0f));
+	this->body = Triangle::CreateTriangle("body", glm::vec3 (0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0, 0.74f, 1.0f));
 
 	// Create wingLeft
-	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, glm::vec3(0.0, 0.74f, 1.0f));
+	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(1.32f, 1.32f, 1.32f));
 
 	// Create wingRight
-	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, glm::vec3(0.0, 0.74f, 1.0f));
+	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(1.32f, 1.32f, 1.32f));
 
 	// Create head
 	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f);
@@ -44,6 +44,11 @@ Mesh* Duck::getWingLeft() {
 	return wingLeft;
 }
 
+std::pair<float, float> Duck::getLeftWingBodyOffset()
+{
+	return this->leftWingBodyOffset;
+}
+
 std::string Duck::getWingLeftString()
 {
 	return std::string("wingLeft");
@@ -54,9 +59,15 @@ Mesh* Duck::getWingRight() {
 	return wingRight;
 }
 
+
 std::string Duck::getWingRightString()
 {
 	return std::string("wingRight");
+}
+
+std::pair<float, float> Duck::getRightWingBodyOffset()
+{
+	return this->rightWingBodyOffset;
 }
 
 // Head
@@ -69,6 +80,11 @@ std::string Duck::getHeadString()
 	return std::string("head");
 }
 
+std::pair<float, float> Duck::getHeadBodyOffset()
+{
+	return this->headBodyOffset;
+}
+
 // Beak
 Mesh* Duck::getBeak() {
 	return beak;
@@ -77,6 +93,11 @@ Mesh* Duck::getBeak() {
 std::string Duck::getBeakString()
 {
 	return std::string("beak");
+}
+
+std::pair<float, float> Duck::getBeakBodyOffset()
+{
+	return this->beakBodyOffset;
 }
 
 /* Setters */

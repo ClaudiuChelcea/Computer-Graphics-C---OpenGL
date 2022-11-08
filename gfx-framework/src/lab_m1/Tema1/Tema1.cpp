@@ -31,6 +31,9 @@ void Tema1::Init()
 
     // Create model matrix
     modelMatrix = glm::mat3 { 1 };
+
+    // Wings movement
+    angularStepIncreasing = true;
 }
 
 void Tema1::FrameStart()
@@ -59,19 +62,55 @@ void Tema1::Update(float deltaTimeSeconds)
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
     modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBodyString()], shaders["VertexColor"], modelMatrix);
+  
+    // Wing rotation step
+    if (angularStepIncreasing) {
+        angularStep += deltaTimeSeconds;
+        if (angularStep > 0.8)
+            angularStepIncreasing = false;
+    }
+    else {
+       angularStep -= deltaTimeSeconds;
+       if (angularStep <= 0)
+           angularStepIncreasing = true;
+    }
 
     // Render left wing
-    //RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getWingLeftString()], shaders["VertexColor"], modelMatrix);
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getLeftWingBodyOffset().first, my_duck_manager.getDuckAlive()->getLeftWingBodyOffset().second);
+    modelMatrix *= transform2D::Rotate(1.65 * my_duck_manager.getDuckAlive()->getBodyRotation());
+    modelMatrix *= transform2D::Rotate(angularStep);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getWingLeftString()], shaders["VertexColor"], modelMatrix);
 
-    //modelMatrix = glm::mat3(1);
-    //
-    //modelMatrix *= transform2D::Rotate(-1);
-    
-    //modelMatrix *= transform2D::Rotate(angularStep);
+    // Render right wing
+    // Redo body
+    modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
+    // Now add wing
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getRightWingBodyOffset().first, my_duck_manager.getDuckAlive()->getRightWingBodyOffset().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation() / 3);
+    modelMatrix *= transform2D::Rotate(-angularStep);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getWingRightString()], shaders["VertexColor"], modelMatrix);
 
-   // modelMatrix = transform2D::Translate(my_duck.getBodyPosition().first, my_duck.getBodyPosition().second);
-    //RenderMesh2D(meshes[my_duck.getWingLeftString()], shaders["VertexColor"], modelMatrix);
-    
+    // Render head
+    // Redo body
+    modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
+    // Now add head
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHeadBodyOffset().first, my_duck_manager.getDuckAlive()->getHeadBodyOffset().second);
+    modelMatrix *= transform2D::Scale(0.40f, 0.40f);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHeadString()], shaders["VertexColor"], modelMatrix);
+
+    // Render beak
+    // Redo body
+    modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
+    // Now add beak
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBeakBodyOffset().first, my_duck_manager.getDuckAlive()->getBeakBodyOffset().second);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBeakString()], shaders["VertexColor"], modelMatrix);
+
     // Update horizontal position
     //positionX = positionX + speedX;
 
@@ -107,33 +146,10 @@ void Tema1::Update(float deltaTimeSeconds)
     //    speedY = -1;
     //}
 
-    //angularStep += deltaTimeSeconds;
-    //if (angularStep > 0.7) {
-    //    angularStep = 0;
-    //}
+    
 
     //my_duck.getPositionOfBody() = glm::mat3(1);
     //modelMatrix = transform2D::Translate(positionX, positionY);
-
-    
-
-    //modelMatrix = glm::mat3(1);
-    //modelMatrix *= transform2D::Translate(153, 233);
-    //modelMatrix *= transform2D::Rotate(-1);
-    //modelMatrix *= transform2D::Translate(+50, +50);
-    //modelMatrix *= transform2D::Rotate(-angularStep);
-    //modelMatrix *= transform2D::Translate(-50, -50);
-    //RenderMesh2D(meshes[my_duck.getWingRightString()], shaders["VertexColor"], modelMatrix);
-
-    //modelMatrix = glm::mat3(1);
-    //modelMatrix *= transform2D::Translate(240, 245);
-    //modelMatrix *= transform2D::Scale(0.3, 0.3);
-    //RenderMesh2D(meshes[my_duck.getHeadString()], shaders["VertexColor"], modelMatrix);
-
-    //modelMatrix = glm::mat3(1);
-    //modelMatrix *= transform2D::Translate(263, 258);
-    //modelMatrix *= transform2D::Rotate(-2.7);
-    //RenderMesh2D(meshes[my_duck.getBeakString()], shaders["VertexColor"], modelMatrix);
 }
 
 void Tema1::FrameEnd()

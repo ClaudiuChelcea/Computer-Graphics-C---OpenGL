@@ -15,15 +15,19 @@ private:
 
 	// Wing Left
 	Mesh* wingLeft{ NULL }; // The left wing of the duck
+	std::pair<float, float> leftWingBodyOffset{ 25.0f, 0.0f };
 
 	// Wing Right
 	Mesh* wingRight{ NULL }; // The right wing of the duck
+	std::pair<float, float> rightWingBodyOffset{ 0.0f, 25.0f }; 
 
 	// Head
 	Mesh* head { NULL }; // The head of the duck
+	std::pair<float, float> headBodyOffset{ -15.0f, -15.0f };
 
 	// Beak
 	Mesh* beak { NULL }; // The beak of the duck
+	std::pair<float, float> beakBodyOffset{ -15.0f, -15.0f };
 public:
 	// Constructor
 	Duck() = default;
@@ -41,18 +45,22 @@ public:
 	// Wing Left
 	Mesh* getWingLeft();
 	std::string getWingLeftString();
+	std::pair<float, float> getLeftWingBodyOffset();
 
 	// Wing Right
 	Mesh* getWingRight();
 	std::string getWingRightString();
+	std::pair<float, float> getRightWingBodyOffset();
 
 	// Head
 	Mesh* getHead();
 	std::string getHeadString();
+	std::pair<float, float> getHeadBodyOffset();
 
 	// Beak
 	Mesh* getBeak();
 	std::string getBeakString();
+	std::pair<float, float> getBeakBodyOffset();
 	
 	/* Setters */
 	// Body
