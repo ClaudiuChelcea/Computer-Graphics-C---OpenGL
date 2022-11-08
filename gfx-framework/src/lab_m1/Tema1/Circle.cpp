@@ -8,7 +8,7 @@
 * @param nrOfTriangles the number of triangles of the circle
 * @result A circle mesh
 */
-Mesh* Circle::CreateCircle(const std::string& circle_name, glm::vec3 center, int radius, int nrOfTriangles)
+Mesh* Circle::CreateCircle(const std::string& circle_name, glm::vec3 center, int radius, int nrOfTriangles, glm::vec3 color)
 {
     Mesh* head = new Mesh(circle_name);
 
@@ -18,7 +18,7 @@ Mesh* Circle::CreateCircle(const std::string& circle_name, glm::vec3 center, int
     // Create vertices and indices
     int trianglesBuilt = 0;
     while (trianglesBuilt < nrOfTriangles) {
-        vertices.emplace_back(glm::vec3(radius * cosf(2.0f * PI * (float(trianglesBuilt) / float(nrOfTriangles))), radius * sinf(2.0f * PI * (float(trianglesBuilt) / float(nrOfTriangles))), 0));
+        vertices.emplace_back(glm::vec3(radius * cosf(2.0f * PI * (float(trianglesBuilt) / float(nrOfTriangles))), radius * sinf(2.0f * PI * (float(trianglesBuilt) / float(nrOfTriangles))), 0), color);
         indices.push_back(trianglesBuilt);
         ++trianglesBuilt;
     }

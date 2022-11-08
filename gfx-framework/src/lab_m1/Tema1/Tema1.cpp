@@ -9,7 +9,7 @@ Tema1::~Tema1() = default;
 void Tema1::Init()
 {
     // Set window
-    glm::ivec2 resolution = window->GetResolution();
+    resolution = window->GetResolution();
     auto camera = GetSceneCamera();
     camera->SetOrthographic(0, (float)resolution.x, 0, (float)resolution.y, 0.01f, 400);
     camera->SetPosition(glm::vec3(0, 0, 50));
@@ -48,15 +48,48 @@ void Tema1::FrameStart()
     glViewport(0, 0, resolution.x, resolution.y);
 }
 
-//int positionX = 32;
-//int speedX = 2;
-//int positionY = 32;
-//int speedY = 1;
-//int ballSize = 8;
-
-
 void Tema1::Update(float deltaTimeSeconds)
 {
+    
+    /* Calculate horizontal position */
+    // If the bird reaches the left side of the screen
+    if (my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getDuckWidth().first < 0) {
+        // Go right
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+    }
+
+    // If the bird reaches the right side of the screen
+    if (my_duck_manager.getDuckAlive()->getBodyPosition().first > resolution.x - my_duck_manager.getDuckAlive()->getDuckWidth().second) {
+        // Go left
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+    }
+
+    /* Calculate vertical position */
+    // If the bird reaches the bottom of the screen
+    if (my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getDuckHeight().first < 0) {
+        // Go up
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+    }
+
+    // If the bird reaches the top of the screen
+    if (my_duck_manager.getDuckAlive()->getBodyPosition().second > resolution.y - my_duck_manager.getDuckAlive()->getDuckHeight().second) {
+        // Go down
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+    }
+
+
+
+    //my_duck.getPositionOfBody() = glm::mat3(1);
+    //modelMatrix = transform2D::Translate(positionX, positionY);
+    // 
+    // 
+    
+    // Update position
+    my_duck_manager.getDuckAlive()->setBodyPosition(
+        std::make_pair(
+            my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed(),
+            my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed()));
+
     // Render body
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
@@ -106,50 +139,10 @@ void Tema1::Update(float deltaTimeSeconds)
     // Redo body
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
-    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
     // Now add beak
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBeakBodyOffset().first, my_duck_manager.getDuckAlive()->getBeakBodyOffset().second);
+    modelMatrix *= transform2D::Rotate(PI);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBeakString()], shaders["VertexColor"], modelMatrix);
-
-    // Update horizontal position
-    //positionX = positionX + speedX;
-
-
-    //// If the ball reaches the left side of the screen
-    //if (positionX < 0) {
-    //    // Go right
-    //    speedX = 1;
-    //}
-
-
-    //// If the ball reaches the right side of the screen
-    //if (positionX > 1280 - ballSize) {
-    //    // Go left
-    //    speedX = -1;
-    //}
-
-
-    //// Update vertical position
-    //positionY = positionY + speedY;
-
-
-    //// If the ball reaches the top side of the screen
-    //if (positionY < 0) {
-    //    // Go down
-    //    speedY = 1;
-    //}
-
-
-    //// If the ball reaches the bottom side of the screen
-    //if (positionY > 920 - ballSize) {
-    //    // Go up
-    //    speedY = -1;
-    //}
-
-    
-
-    //my_duck.getPositionOfBody() = glm::mat3(1);
-    //modelMatrix = transform2D::Translate(positionX, positionY);
 }
 
 void Tema1::FrameEnd()

@@ -19,7 +19,7 @@ namespace Circle {
      * @param nrOfTriangles the number of triangles of the circle
      * @result A circle mesh
      */
-    Mesh* CreateCircle(const std::string& circle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, int radius = 0, int nrOfTriangles = 0);
+    Mesh* CreateCircle(const std::string& circle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, int radius = 0, int nrOfTriangles = 0, glm::vec3 color = { 0.0f, 0.0f, 0.0f });
 };
 
 #endif // __CIRCLE_H

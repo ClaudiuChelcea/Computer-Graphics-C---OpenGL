@@ -33,10 +33,11 @@ namespace m1
         void OnWindowResize(int width, int height) override;
 
     protected:
-        float angularStep;
-        bool angularStepIncreasing = true;
-        glm::mat3 modelMatrix;
-        GameManager::DuckManager my_duck_manager;
+        float angularStep; // wing rotation animation
+        bool angularStepIncreasing = true; // used for angularStep
+        glm::mat3 modelMatrix; // modelMatrix for rendering shapes
+        GameManager::DuckManager my_duck_manager; // manage ducks
+        glm::ivec2 resolution; // window resolution
     };
 }   // namespace m1
 

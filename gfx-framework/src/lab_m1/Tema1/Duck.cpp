@@ -7,16 +7,16 @@ void Duck::createDuck()
 	this->body = Triangle::CreateTriangle("body", glm::vec3 (0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0, 0.74f, 1.0f));
 
 	// Create wingLeft
-	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(1.32f, 1.32f, 1.32f));
+	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.4f, 0.6f, 0.4f));
 
 	// Create wingRight
-	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(1.32f, 1.32f, 1.32f));
+	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.4f, 0.6f, 0.4f));
 
 	// Create head
-	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f);
+	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f, glm::vec3(0.8f, 0.1f, 0.9f));
 
 	// Create beak
-	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 10.0f, glm::vec3(0.0, 0.74f, 1.0f));
+	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.6f, 0.3f, 0.8f));
 }
 
 /* Getters */
