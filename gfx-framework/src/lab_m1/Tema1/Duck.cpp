@@ -17,6 +17,13 @@ void Duck::createDuck()
 
 	// Create beak
 	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.6f, 0.3f, 0.8f));
+
+	// Create hitbox
+	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 125.0f, 125.0f, glm::vec3(0.6f, 0.3f, 0.8f));
+
+	// Calculate gravity center
+	gravityCenter.first = (0 + 125) / 2;
+	gravityCenter.second = (0 + 125) / 2;
 }
 
 /* Getters */
@@ -98,6 +105,21 @@ std::string Duck::getBeakString()
 std::pair<float, float> Duck::getBeakBodyOffset()
 {
 	return this->beakBodyOffset;
+}
+
+// Hitbox
+Mesh* Duck::getHitbox() {
+	return hitbox;
+}
+
+std::string Duck::getHitboxString()
+{
+	return std::string("hitbox");
+}
+
+std::pair<float, float> Duck::getHitboxBodyOffset()
+{
+	return this->hitboxBodyOffset;
 }
 
 /* Setters */

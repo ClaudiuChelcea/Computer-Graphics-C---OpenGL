@@ -5,6 +5,7 @@
 
 #include "lab_m1/Tema1/Triangle.h"
 #include "lab_m1/Tema1/Circle.h"
+#include "lab_m1/Tema1/Rectangle.h"
 
 class Duck {
 private:
@@ -14,6 +15,7 @@ private:
 	float bodyRotation{ 0.0f };
 	std::pair<int, int> duckWidth{ -85, 40 }; // LEFT AND RIGHT
 	std::pair<int, int> duckHeight{ -85, 40 }; // LEFT AND RIGHT
+	std::pair<float, float> gravityCenter{ 0.0f, 0.0f };
 
 	// Wing Left
 	Mesh* wingLeft{ NULL }; // The left wing of the duck
@@ -31,16 +33,21 @@ private:
 	Mesh* beak { NULL }; // The beak of the duck
 	std::pair<float, float> beakBodyOffset{ -35.0f, -35.0f };
 
+	// Hitbox
+	Mesh* hitbox { NULL }; // The beak of the duck
+	std::pair<float, float> hitboxBodyOffset{ -35.0f, -30.0f };
+
 	// Speed
-	float xSpeed{ 10.0f };
-	float ySpeed{ 10.0f };
+	float xSpeed{ 5.0f };
+	float ySpeed{ 5.0f };
 
 	// Direction
-	float travellingAngle{ 45.0f };
 	float translateX{ 0.0f };
 	float translateY{ 0.0f };
 
 public:
+	float angular = 30, angularR = 0;
+
 	// Constructor
 	Duck() = default;
 
@@ -55,6 +62,7 @@ public:
 	float getBodyRotation();
 	std::pair<int,int> getDuckWidth() { return duckWidth; }
 	std::pair<int, int> getDuckHeight() { return duckHeight; }
+	std::pair<float, float> getGravityCenter() { return gravityCenter; }
 
 	// Wing Left
 	Mesh* getWingLeft();
@@ -75,13 +83,17 @@ public:
 	Mesh* getBeak();
 	std::string getBeakString();
 	std::pair<float, float> getBeakBodyOffset();
+	
+	// Hitbox
+	Mesh* getHitbox();
+	std::string getHitboxString();
+	std::pair<float, float> getHitboxBodyOffset();
 
 	// Speed
 	float getXSpeed() { return xSpeed; }
 	float getYSpeed() { return ySpeed; }
 
 	// Direction
-	float getTravellingAngle() { return travellingAngle; }
 	float getTranslateX() { return translateX; }
 	float getTranslateY() { return translateY; }
 	
@@ -95,7 +107,6 @@ public:
 	void setYSpeed(float _ySpeed) { ySpeed = _ySpeed; }
 
 	// Direction
-	void setTravellingAngle(float _travellingAngle) {travellingAngle = _travellingAngle; }
 	void setTranslateX(float _translateX) { translateX = _translateX; }
 	void setTranslateY(float _translateY) { translateY = _translateY; }
 };

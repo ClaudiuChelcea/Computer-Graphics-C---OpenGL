@@ -20,4 +20,4 @@ namespace Triangle
     Mesh* CreateTriangle(const std::string& triangle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, float length = 0.0f, glm::vec3 color = { 0.0f, 0.0f, 0.0f });
 }
 
-#endif // __TRIANGLE_H
+#endif // __TRIANGLE_H_
