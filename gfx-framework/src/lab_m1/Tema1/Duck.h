@@ -17,11 +17,11 @@ private:
 
 	// Wing Left
 	Mesh* wingLeft{ NULL }; // The left wing of the duck
-	std::pair<float, float> leftWingBodyOffset{ 25.0f, 0.0f };
+	std::pair<float, float> leftWingBodyOffset{ 25.0f, 5.0f };
 
 	// Wing Right
 	Mesh* wingRight{ NULL }; // The right wing of the duck
-	std::pair<float, float> rightWingBodyOffset{ 0.0f, 25.0f }; 
+	std::pair<float, float> rightWingBodyOffset{ 5.0f, 25.0f };
 
 	// Head
 	Mesh* head { NULL }; // The head of the duck
@@ -29,14 +29,16 @@ private:
 
 	// Beak
 	Mesh* beak { NULL }; // The beak of the duck
-	std::pair<float, float> beakBodyOffset{ 37.5f, 35.0f };
+	std::pair<float, float> beakBodyOffset{ -35.0f, -35.0f };
 
 	// Speed
-	float xSpeed{ 2.0f };
-	float ySpeed{ 1.0f };
+	float xSpeed{ 10.0f };
+	float ySpeed{ 10.0f };
 
 	// Direction
-	float travellingAngle = 45.0f;
+	float travellingAngle{ 45.0f };
+	float translateX{ 0.0f };
+	float translateY{ 0.0f };
 
 public:
 	// Constructor
@@ -80,6 +82,8 @@ public:
 
 	// Direction
 	float getTravellingAngle() { return travellingAngle; }
+	float getTranslateX() { return translateX; }
+	float getTranslateY() { return translateY; }
 	
 	/* Setters */
 	// Body
@@ -92,6 +96,8 @@ public:
 
 	// Direction
 	void setTravellingAngle(float _travellingAngle) {travellingAngle = _travellingAngle; }
+	void setTranslateX(float _translateX) { translateX = _translateX; }
+	void setTranslateY(float _translateY) { translateY = _translateY; }
 };
 
 #endif // __DUCK_H

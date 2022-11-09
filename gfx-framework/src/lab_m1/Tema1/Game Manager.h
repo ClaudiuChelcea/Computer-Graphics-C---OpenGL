@@ -27,6 +27,19 @@ namespace GameManager
 
 			// Setters
 	};
+
+	class myMath
+	{
+	public:
+		static float degreesToRadians(float degrees) {
+			int new_PI = acos(-1);
+			return degrees * new_PI / 100;
+		}
+
+		static float radiansToDegrees(float radians) {
+			return (180 / PI) * radians;
+		}
+	};
 };
 
 #endif // __GAME_MANAGER_H

@@ -6,6 +6,8 @@ using namespace m1;
 Tema1::Tema1() = default;
 Tema1::~Tema1() = default;
 
+float x = 0;
+
 void Tema1::Init()
 {
     // Set window
@@ -53,48 +55,41 @@ void Tema1::FrameStart()
 
 void Tema1::Update(float deltaTimeSeconds)
 {
-    
+    directionX += cos(GameManager::myMath::degreesToRadians(my_duck_manager.getDuckAlive()->getTravellingAngle())) * deltaTimeSeconds * my_duck_manager.getDuckAlive()->getXSpeed();
+    directionY += sin(GameManager::myMath::degreesToRadians(my_duck_manager.getDuckAlive()->getTravellingAngle())) * deltaTimeSeconds * my_duck_manager.getDuckAlive()->getXSpeed();
+
     /* Calculate horizontal position */
     // If the bird reaches the left side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getDuckWidth().first < 0) {
         // Go right
-       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
-        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());// *cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
-        
-        // After each bounce, update the travelling angle to create an unpredictible movement
-        my_duck_manager.getDuckAlive()->setTravellingAngle(rand() % 180);
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
     }
 
     // If the bird reaches the right side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first > resolution.x - my_duck_manager.getDuckAlive()->getDuckWidth().second) {
         // Go left
-       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
-        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());// *cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
-        // After each bounce, update the travelling angle to create an unpredictible movement
-        my_duck_manager.getDuckAlive()->setTravellingAngle(rand() % 180);
+        my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
     }
 
     /* Calculate vertical position */
     // If the bird reaches the bottom of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getDuckHeight().first < 0) {
         // Go up
-        //my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
-        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());// *sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
     }
 
     // If the bird reaches the top of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second > resolution.y - my_duck_manager.getDuckAlive()->getDuckHeight().second) {
         // Go down
-       // my_duck_manager.getDuckAlive()->setTravellingAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() - 90);
-        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());// *sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180));
+        my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
     }
     
     // Update position
     my_duck_manager.getDuckAlive()->setBodyPosition(
         std::make_pair(
-            my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed() * cos(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180),
-            my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed() * sin(my_duck_manager.getDuckAlive()->getTravellingAngle() * PI / 180)));
-
+           my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed(),
+           my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed()));
+    
     // Render body
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
@@ -104,7 +99,7 @@ void Tema1::Update(float deltaTimeSeconds)
     // Wing rotation step
     if (angularStepIncreasing) {
         angularStep += deltaTimeSeconds;
-        if (angularStep > 0.8)
+        if (angularStep > 0.5)
             angularStepIncreasing = false;
     }
     else {
@@ -114,9 +109,14 @@ void Tema1::Update(float deltaTimeSeconds)
     }
 
     // Render left wing
+    // Redo body
+    modelMatrix = glm::mat3(1);
+    modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
+    // Now add wing
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getLeftWingBodyOffset().first, my_duck_manager.getDuckAlive()->getLeftWingBodyOffset().second);
-    modelMatrix *= transform2D::Rotate(1.65 * my_duck_manager.getDuckAlive()->getBodyRotation());
     modelMatrix *= transform2D::Rotate(angularStep);
+    modelMatrix *= transform2D::Rotate(PI + 1);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getWingLeftString()], shaders["VertexColor"], modelMatrix);
 
     // Render right wing
@@ -126,8 +126,8 @@ void Tema1::Update(float deltaTimeSeconds)
     modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
     // Now add wing
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getRightWingBodyOffset().first, my_duck_manager.getDuckAlive()->getRightWingBodyOffset().second);
-    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation() / 3);
     modelMatrix *= transform2D::Rotate(-angularStep);
+    modelMatrix *= transform2D::Rotate(PI - 1);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getWingRightString()], shaders["VertexColor"], modelMatrix);
 
     // Render head
@@ -138,15 +138,17 @@ void Tema1::Update(float deltaTimeSeconds)
     // Now add head
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHeadBodyOffset().first, my_duck_manager.getDuckAlive()->getHeadBodyOffset().second);
     modelMatrix *= transform2D::Scale(0.40f, 0.40f);
+    modelMatrix *= transform2D::Rotate(PI - 1);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHeadString()], shaders["VertexColor"], modelMatrix);
 
     // Render beak
     // Redo body
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
+    modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
     // Now add beak
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBeakBodyOffset().first, my_duck_manager.getDuckAlive()->getBeakBodyOffset().second);
-    modelMatrix *= transform2D::Rotate(PI);
+    modelMatrix *= transform2D::Rotate(0);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBeakString()], shaders["VertexColor"], modelMatrix);
 }
 
