@@ -6,8 +6,8 @@ using namespace m1;
 Tema1::Tema1() = default;
 Tema1::~Tema1() = default;
 
-float translateX = 0, translateY = 0.0f;
-float angular = 30, angularR = 0;
+float movingAngle = 60.0f;
+int x = 0;
 
 void Tema1::Init()
 {
@@ -32,6 +32,7 @@ void Tema1::Init()
     AddMeshToList(my_duck_manager.getDuckAlive()->getHead());
     AddMeshToList(my_duck_manager.getDuckAlive()->getBeak());
     AddMeshToList(my_duck_manager.getDuckAlive()->getHitbox());
+    my_duck_manager.getDuckAlive()->setBodyRotation(GameManager::myMath::degreesToRadians(movingAngle) + PI/1.5F);
 
     // Create model matrix
     modelMatrix = glm::mat3 { 1 };
@@ -57,20 +58,29 @@ void Tema1::FrameStart()
 
 void Tema1::Update(float deltaTimeSeconds)
 {
-    //translateX += 250 * deltaTimeSeconds * cos(GameManager::myMath::degreesToRadians(angular));
-   // translateY += 250 * deltaTimeSeconds * sin(GameManager::myMath::degreesToRadians(angular));
-
     /* Calculate horizontal position */
     // If the bird reaches the left side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getDuckWidth().first < 0) {
         // Go right
         my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+
+        //// Change rotation
+        //float x = my_duck_manager.getDuckAlive()->getBodyPosition().first;
+        //float y = my_duck_manager.getDuckAlive()->getBodyPosition().second;
+        //float new_angle = atan2(y, -x);
+        //my_duck_manager.getDuckAlive()->setBodyRotation(PI + my_duck_manager.getDuckAlive()->getBodyRotation());
     }
 
     // If the bird reaches the right side of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().first > resolution.x - my_duck_manager.getDuckAlive()->getDuckWidth().second) {
         // Go left
         my_duck_manager.getDuckAlive()->setXSpeed(-my_duck_manager.getDuckAlive()->getXSpeed());
+
+        //// Change rotation
+        //float x = my_duck_manager.getDuckAlive()->getBodyPosition().first;
+        //float y = my_duck_manager.getDuckAlive()->getBodyPosition().second;
+        //float new_angle = atan2(y, -x);
+        //my_duck_manager.getDuckAlive()->setBodyRotation(PI+my_duck_manager.getDuckAlive()->getBodyRotation());
     }
 
     /* Calculate vertical position */
@@ -78,19 +88,35 @@ void Tema1::Update(float deltaTimeSeconds)
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getDuckHeight().first < 0) {
         // Go up
         my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+
+        // Change rotation
+        /*float x = my_duck_manager.getDuckAlive()->getBodyPosition().first;
+        float y = my_duck_manager.getDuckAlive()->getBodyPosition().second;
+        float new_angle = atan2(-y, x);
+        
+        my_duck_manager.getDuckAlive()->setBodyRotation(PI+new_angle);
+        std::cout << (int)(GameManager::myMath::radiansToDegrees( PI + new_angle)) % 360 << std::endl;*/
     }
 
     // If the bird reaches the top of the screen
     if (my_duck_manager.getDuckAlive()->getBodyPosition().second > resolution.y - my_duck_manager.getDuckAlive()->getDuckHeight().second) {
         // Go down
         my_duck_manager.getDuckAlive()->setYSpeed(-my_duck_manager.getDuckAlive()->getYSpeed());
+
+        // Change rotation
+        /*float x = my_duck_manager.getDuckAlive()->getBodyPosition().first;
+        float y = my_duck_manager.getDuckAlive()->getBodyPosition().second;
+        float new_angle = atan2(-y, x);
+        my_duck_manager.getDuckAlive()->setBodyRotation(my_duck_manager.getDuckAlive()->getBodyRotation() + new_angle);
+        std::cout << (int)(GameManager::myMath::radiansToDegrees(PI + new_angle))%360 << std::endl;*/
+        
     }
     
      // Update position
      my_duck_manager.getDuckAlive()->setBodyPosition(
          std::make_pair(
-             my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed(),
-             my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed()));
+             my_duck_manager.getDuckAlive()->getBodyPosition().first + my_duck_manager.getDuckAlive()->getXSpeed() * cos(GameManager::myMath::degreesToRadians(movingAngle)),
+             my_duck_manager.getDuckAlive()->getBodyPosition().second + my_duck_manager.getDuckAlive()->getYSpeed() * sin(GameManager::myMath::degreesToRadians(movingAngle))));
 
      // Render body
      modelMatrix = glm::mat3(1);
@@ -140,7 +166,6 @@ void Tema1::Update(float deltaTimeSeconds)
     // Now add head
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHeadBodyOffset().first, my_duck_manager.getDuckAlive()->getHeadBodyOffset().second);
     modelMatrix *= transform2D::Scale(0.40f, 0.40f);
-    modelMatrix *= transform2D::Rotate(PI - 1);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHeadString()], shaders["VertexColor"], modelMatrix);
 
     // Render beak
@@ -150,13 +175,14 @@ void Tema1::Update(float deltaTimeSeconds)
     modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
     // Now add beak
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBeakBodyOffset().first, my_duck_manager.getDuckAlive()->getBeakBodyOffset().second);
-    modelMatrix *= transform2D::Rotate(0);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBeakString()], shaders["VertexColor"], modelMatrix);
 
     // Render hitbox
+    // Redo body
     modelMatrix = glm::mat3(1);
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBodyPosition().first, my_duck_manager.getDuckAlive()->getBodyPosition().second);
     modelMatrix *= transform2D::Rotate(my_duck_manager.getDuckAlive()->getBodyRotation());
+    // Now add hitbox
     modelMatrix *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHitboxBodyOffset().first, my_duck_manager.getDuckAlive()->getHitboxBodyOffset().second);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHitboxString()], shaders["VertexColor"], modelMatrix);
 }

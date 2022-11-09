@@ -32,8 +32,7 @@ namespace GameManager
 	{
 	public:
 		static float degreesToRadians(float degrees) {
-			int new_PI = acos(-1);
-			return degrees * new_PI / 100;
+			return degrees * PI / 180;
 		}
 
 		static float radiansToDegrees(float radians) {

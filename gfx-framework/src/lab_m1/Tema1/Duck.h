@@ -38,8 +38,8 @@ private:
 	std::pair<float, float> hitboxBodyOffset{ -35.0f, -30.0f };
 
 	// Speed
-	float xSpeed{ 5.0f };
-	float ySpeed{ 5.0f };
+	float xSpeed{ 10.0f };
+	float ySpeed{ 10.0f };
 
 	// Direction
 	float translateX{ 0.0f };
