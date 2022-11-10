@@ -17,6 +17,7 @@ namespace Circle {
      * @param center the center to start drawing from
      * @param radius the radius of the circle
      * @param nrOfTriangles the number of triangles of the circle
+     * @param color the color of the circle
      * @result A circle mesh
      */
     Mesh* CreateCircle(const std::string& circle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, int radius = 0, int nrOfTriangles = 0, glm::vec3 color = { 0.0f, 0.0f, 0.0f });

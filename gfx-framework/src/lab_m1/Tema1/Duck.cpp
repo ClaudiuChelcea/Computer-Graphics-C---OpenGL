@@ -1,4 +1,4 @@
-#include "lab_m1/Tema1/Duck.h"
+#include "Duck.h"
 
 // Constructor
 void Duck::createDuck()
@@ -19,7 +19,7 @@ void Duck::createDuck()
 	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.6f, 0.3f, 0.8f));
 
 	// Create hitbox
-	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 125.0f, 125.0f, glm::vec3(0.6f, 0.3f, 0.8f));
+	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 130.0f, 130.0f, glm::vec3(0.6f, 0.3f, 0.8f));
 
 	// Calculate gravity center
 	gravityCenter.first = (0 + 125) / 2;
@@ -45,6 +45,10 @@ std::pair<float, float> Duck::getBodyPosition()
 float Duck::getBodyRotation() {
 	return this->bodyRotation;
 }
+
+std::pair<int, int> Duck::getDuckWidth() { return duckWidth; }
+std::pair<int, int> Duck::getDuckHeight() { return duckHeight; }
+std::pair<float, float> Duck::getGravityCenter() { return gravityCenter; }
 
 // Wing Left
 Mesh* Duck::getWingLeft() {
@@ -122,6 +126,17 @@ std::pair<float, float> Duck::getHitboxBodyOffset()
 	return this->hitboxBodyOffset;
 }
 
+// Speed
+float Duck::getSpeed() { return Speed; }
+
+// Direction
+float Duck::getTranslateX() { return translateX; }
+float Duck::getTranslateY() { return translateY; }
+
+// Orientation
+float Duck::getTravellingAngle() { return travellingAngle; }
+float Duck::getDuckAngle() { return duckAngle; }
+
 /* Setters */
 // Body
 void Duck::setBodyPosition(std::pair<float, float> position)
@@ -134,4 +149,21 @@ void Duck::setBodyRotation(float radians)
 {
 	this->bodyRotation = radians;
 }
+
+void Duck::setGravityCenter(std::pair<float, float> _gravity_center)
+{
+	gravityCenter.first = _gravity_center.first;
+	gravityCenter.second = _gravity_center.second;
+}
+
+// Speed
+void Duck::setSpeed(float _Speed) { Speed = _Speed; }
+
+// Direction
+void Duck::setTranslateX(float _translateX) { translateX = _translateX; };
+void Duck::setTranslateY(float _translateY) { translateY = _translateY; };
+
+// Orientation
+void Duck::setTravellingAngle(float _travellingAngle) { travellingAngle = _travellingAngle; }
+void Duck::setDuckAngle(float _duckAngle) { duckAngle = _duckAngle; }
 

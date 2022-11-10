@@ -6,13 +6,14 @@
 * @param center the center to start drawing from
 * @param radius the radius of the circle
 * @param nrOfTriangles the number of triangles of the circle
+* @param color the color of the circle
 * @result A circle mesh
 */
-Mesh* Circle::CreateCircle(const std::string& circle_name, glm::vec3 center, int radius, int nrOfTriangles, glm::vec3 color)
+Mesh* Circle::CreateCircle(const std::string& circle_name, glm::vec3 Corner, int radius, int nrOfTriangles, glm::vec3 color)
 {
     Mesh* head = new Mesh(circle_name);
 
-    std::vector<VertexFormat> vertices{ center };
+    std::vector<VertexFormat> vertices{ Corner };
     std::vector<unsigned int> indices;
 
     // Create vertices and indices

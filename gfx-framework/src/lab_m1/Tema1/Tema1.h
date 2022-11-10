@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "components/simple_scene.h"
-#include "lab_m1/Tema1/transform2D.h"
-#include "lab_m1/Tema1/Game Manager.h"
+#include "transform2D.h"
+#include "Game Manager.h"
 
 namespace m1
 {
@@ -38,7 +38,6 @@ namespace m1
         glm::mat3 modelMatrix; // modelMatrix for rendering shapes
         GameManager::DuckManager my_duck_manager; // manage ducks
         glm::ivec2 resolution; // window resolution
-        float directionX{ 0 }, directionY{ 0 };
     };
 }   // namespace m1
 

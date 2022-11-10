@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "lab_m1/Tema1/Triangle.h"
-#include "lab_m1/Tema1/Circle.h"
-#include "lab_m1/Tema1/Rectangle.h"
+#include "Triangle.h"
+#include "Circle.h"
+#include "Rectangle.h"
 
 class Duck {
 private:
@@ -19,35 +19,36 @@ private:
 
 	// Wing Left
 	Mesh* wingLeft{ NULL }; // The left wing of the duck
-	std::pair<float, float> leftWingBodyOffset{ 25.0f, 5.0f };
+	std::pair<float, float> leftWingBodyOffset{ 25.0f, -25.0f };
 
 	// Wing Right
 	Mesh* wingRight{ NULL }; // The right wing of the duck
-	std::pair<float, float> rightWingBodyOffset{ 5.0f, 25.0f };
+	std::pair<float, float> rightWingBodyOffset{ -25.0f, 25.0f };
 
 	// Head
 	Mesh* head { NULL }; // The head of the duck
-	std::pair<float, float> headBodyOffset{ -15.0f, -15.0f };
+	std::pair<float, float> headBodyOffset{ -45.0f, -40.0f };
 
 	// Beak
 	Mesh* beak { NULL }; // The beak of the duck
-	std::pair<float, float> beakBodyOffset{ -35.0f, -35.0f };
+	std::pair<float, float> beakBodyOffset{ -40.0f, -35.0f };
 
 	// Hitbox
 	Mesh* hitbox { NULL }; // The beak of the duck
-	std::pair<float, float> hitboxBodyOffset{ -35.0f, -30.0f };
+	std::pair<float, float> hitboxBodyOffset{ -40.0f, -40.0f };
 
 	// Speed
-	float xSpeed{ 10.0f };
-	float ySpeed{ 10.0f };
+	float Speed{ 300.0f };
 
 	// Direction
-	float translateX{ 0.0f };
+	float translateX{ 0.0f }; 
 	float translateY{ 0.0f };
 
-public:
-	float angular = 30, angularR = 0;
+	// Orientation
+	float travellingAngle{ 45 };
+	float duckAngle{ 180 };
 
+public:
 	// Constructor
 	Duck() = default;
 
@@ -60,9 +61,9 @@ public:
 	std::string getBodyString();
 	std::pair<float, float> getBodyPosition();
 	float getBodyRotation();
-	std::pair<int,int> getDuckWidth() { return duckWidth; }
-	std::pair<int, int> getDuckHeight() { return duckHeight; }
-	std::pair<float, float> getGravityCenter() { return gravityCenter; }
+	std::pair<int, int> getDuckWidth();
+	std::pair<int, int> getDuckHeight();
+	std::pair<float, float> getGravityCenter();
 
 	// Wing Left
 	Mesh* getWingLeft();
@@ -90,25 +91,32 @@ public:
 	std::pair<float, float> getHitboxBodyOffset();
 
 	// Speed
-	float getXSpeed() { return xSpeed; }
-	float getYSpeed() { return ySpeed; }
+	float getSpeed();
 
 	// Direction
-	float getTranslateX() { return translateX; }
-	float getTranslateY() { return translateY; }
+	float getTranslateX();
+	float getTranslateY();
+
+	// Orientation
+	float getTravellingAngle();
+	float getDuckAngle();
 	
 	/* Setters */
 	// Body
 	void setBodyPosition(std::pair<float, float> position);
 	void setBodyRotation(float radians);
+	void setGravityCenter(std::pair<float, float> _gravity_center);
 
 	// Speed
-	void setXSpeed(float _xSpeed) { xSpeed = _xSpeed; }
-	void setYSpeed(float _ySpeed) { ySpeed = _ySpeed; }
+	void setSpeed(float _Speed);
 
 	// Direction
-	void setTranslateX(float _translateX) { translateX = _translateX; }
-	void setTranslateY(float _translateY) { translateY = _translateY; }
+	void setTranslateX(float _translateX);
+	void setTranslateY(float _translateY);
+
+	// Orientation
+	void setTravellingAngle(float _travellingAngle);
+	void setDuckAngle(float _duckAngle);
 };
 
 #endif // __DUCK_H

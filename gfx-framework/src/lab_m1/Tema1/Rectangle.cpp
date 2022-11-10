@@ -2,8 +2,9 @@
 
 /**
  * Create a rectangle shape
- * @param triangle_name name given to object
+ * @param rectangle_name name given to object
  * @param Corner the corner of the object to start drawing from
+ * @param heoght the height of the rectangle
  * @param length the lenght of one side of the rectangle
  * @param color the color used for the rectangle
  * @result A rectangle mesh

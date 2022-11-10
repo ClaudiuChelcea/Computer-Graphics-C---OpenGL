@@ -23,3 +23,17 @@ Duck* DuckManager::getDuckAlive()
 {
 	return my_duck;
 }
+
+std::pair<int, int> DuckManager::getSpawnPoint() {
+	return spawnPoint;
+}
+
+std::vector<std::pair<int, int>>& DuckManager::getSpawnPoints() {
+	return spawnPoints;
+}
+
+// Setters
+void DuckManager::setSpawnPoint(std::pair<int, int> _spawnPoint) {
+	spawnPoint.first = _spawnPoint.first;
+	spawnPoint.second = _spawnPoint.second;
+}
