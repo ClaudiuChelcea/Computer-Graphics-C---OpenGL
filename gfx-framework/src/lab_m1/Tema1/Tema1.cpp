@@ -28,7 +28,7 @@ void Tema1::Init()
 
     // Create list of spawnpoints
     for (int yPos = 50; yPos <= 100; yPos = yPos + 10) {
-        for (int xPos = 200; xPos <= 600; xPos = xPos + 25) {
+        for (int xPos = 100; xPos <= 600; xPos = xPos + 25) {
             my_duck_manager.getSpawnPoints().push_back(std::make_pair(xPos, yPos));
         }
     }
@@ -81,6 +81,10 @@ void Tema1::Init()
     AddMeshToList(my_UI.getBullet3());
     AddMeshToList(my_UI.gethealthBarBorder());
     AddMeshToList(my_UI.gethealthProgressBar());
+    AddMeshToList(my_UI.getTree1trunk());
+    AddMeshToList(my_UI.getTree1crown());
+    AddMeshToList(my_UI.getTree2trunk());
+    AddMeshToList(my_UI.getTree2crown());
 
     // Progress bar
     progressBarGoal = 217.0f;
@@ -102,14 +106,8 @@ void Tema1::FrameStart()
 
 void Tema1::Update(float deltaTimeSeconds)
 {
-    // Ground
-    glm::mat3 body_part = glm::mat3(1);
-    #if SHOW_GROUND
-    RenderMesh2D(meshes[my_UI.getGroundString()], shaders["VertexColor"], body_part);
-    #endif
-
     // Lives
-    body_part = glm::mat3(1);
+    glm::mat3 body_part = glm::mat3(1);
     body_part = transform2D::Translate(1025.0f, 650.0f);
     if (my_duck_manager.getDuckAlive()->getLivesCount() >= 3) {
         RenderMesh2D(meshes[my_UI.getLife1String()], shaders["VertexColor"], body_part);
@@ -147,6 +145,23 @@ void Tema1::Update(float deltaTimeSeconds)
     RenderMesh2D(meshes[my_UI.gethealthBarBorderString()], shaders["VertexColor"], body_part);
     body_part *= transform2D::Translate(4.0f, 2.5f);
     RenderMesh2D(meshes[my_UI.gethealthProgressBarString()], shaders["VertexColor"], body_part);
+
+    // Ground
+    body_part = glm::mat3(1);
+    #if SHOW_GROUND
+    RenderMesh2D(meshes[my_UI.getGroundString()], shaders["VertexColor"], body_part);
+    #endif
+
+    // Trees
+    body_part = glm::mat3(1);
+    body_part = transform2D::Translate(200.0f, 500.0f);
+    RenderMesh2D(meshes[my_UI.getTree1crownString()], shaders["VertexColor"], body_part);
+    body_part *= transform2D::Translate(-35.0f, -200.0f);
+    RenderMesh2D(meshes[my_UI.getTree1trunkString()], shaders["VertexColor"], body_part);
+    body_part *= transform2D::Translate(900.0f, 200.0f);
+    RenderMesh2D(meshes[my_UI.getTree2crownString()], shaders["VertexColor"], body_part);
+    body_part *= transform2D::Translate(-35.0f, -200.0f);
+    RenderMesh2D(meshes[my_UI.getTree2trunkString()], shaders["VertexColor"], body_part);
 
     // Increment time
     my_duck_manager.getDuckAlive()->setTimeAlive(my_duck_manager.getDuckAlive()->getTimeAlive() + deltaTimeSeconds);
@@ -349,7 +364,10 @@ void Tema1::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
 {
     // If we have bullets
-    if (my_duck_manager.getDuckAlive()->getBulletsCount() > 0 && my_duck_manager.getDuckAlive()->getEvading() == false) {
+    // And if the duck is not evading
+    // And if the duck is above the ground
+    if (my_duck_manager.getDuckAlive()->getBulletsCount() > 0 && my_duck_manager.getDuckAlive()->getEvading() == false
+        && mouseY <= 720 - 300) {
         // Reduce the number of bullets (if the duck was not shot already)
         if(my_duck_manager.getDuckAlive()->getWasShot() == false)
             my_duck_manager.getDuckAlive()->setBulletsCount(my_duck_manager.getDuckAlive()->getBulletsCount() - 1);

@@ -74,6 +74,12 @@ UI::UI()
 	// Create healthbar
 	this->healthBarBorder = Rectangle::CreateRectangle("healthBarBorder", glm::vec3(0.0f, 0.0f, 0.0f), 25.0f, 225.0f, glm::vec3(0.0f, 0.0f, 0.0f), false);
 	this->healthProgressBar = Rectangle::CreateRectangle("healthProgressBar", glm::vec3(0.0f, 0.0f, 0.0f), 20.0f, 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	
+	// Create trees
+	this->tree1trunk = Rectangle::CreateRectangle("tree1trunk", glm::vec3(0.0f, 0.0f, 0.0f), 250.0f, 75.0f, glm::vec3(0.54f, 0.27f, 0.07f), true);
+	this->tree1crown = Circle::CreateCircle("tree1crown", glm::vec3(0.0f, 0.0f, 0.0f), 100.0f, 100, glm::vec3(0.19f, 0.80f, 0.19f));
+	this->tree2trunk = Rectangle::CreateRectangle("tree2trunk", glm::vec3(0.0f, 0.0f, 0.0f), 250.0f, 75.0f, glm::vec3(0.54f, 0.27f, 0.07f), true);
+	this->tree2crown = Circle::CreateCircle("tree2crown", glm::vec3(0.0f, 0.0f, 0.0f), 100.0f, 100, glm::vec3(0.19f, 0.80f, 0.19f));
 }
 
 // Ground
@@ -189,4 +195,45 @@ std::string UI::gethealthProgressBarString()
 float UI::getProgressBarMaxVal()
 {
 	return progress_bar_max_val;
+}
+
+// Trees
+Mesh* UI::getTree1trunk()
+{
+	return tree1trunk;
+}
+
+std::string UI::getTree1trunkString()
+{
+	return "tree1trunk";
+}
+
+Mesh* UI::getTree1crown()
+{
+	return tree1crown;
+}
+
+std::string UI::getTree1crownString()
+{
+	return "tree1crown";
+}
+
+Mesh* UI::getTree2trunk()
+{
+	return tree2trunk;
+}
+
+std::string UI::getTree2trunkString()
+{
+	return "tree2trunk";
+}
+
+Mesh* UI::getTree2crown()
+{
+	return tree2crown;
+}
+
+std::string UI::getTree2crownString()
+{
+	return "tree2crown";
 }

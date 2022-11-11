@@ -70,6 +70,14 @@ namespace GameManager
 		Mesh* healthProgressBar;
 		float progress_bar_max_val = 217.0f;
 
+		// Tree 1
+		Mesh* tree1trunk;
+		Mesh* tree1crown;
+
+		// Tree 2
+		Mesh* tree2trunk;
+		Mesh* tree2crown;
+
 	public:
 		UI(); // create the whole UI
 
@@ -105,6 +113,16 @@ namespace GameManager
 		Mesh** gethealthProgressBarReference();
 		std::string gethealthProgressBarString();
 		float getProgressBarMaxVal();
+
+		// Trees
+		Mesh* getTree1trunk();
+		std::string getTree1trunkString();
+		Mesh* getTree1crown();
+		std::string getTree1crownString();
+		Mesh* getTree2trunk();
+		std::string getTree2trunkString();
+		Mesh* getTree2crown();
+		std::string getTree2crownString();
 	};
 }
 
