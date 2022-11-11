@@ -50,7 +50,7 @@ private:
 	std::pair<float, float> eyeRightBodyOffsetPupil{ -70.0f, -30.0f };
 
 	// Speed
-	float Speed{ 300.0f };
+	float Speed{ 500.0f };
 
 	// Direction
 	float translateX{ 0.0f }; 
@@ -127,6 +127,7 @@ public:
 
 	// Speed
 	float getSpeed();
+	float getInitialSpeed();
 
 	// Direction
 	float getTranslateX();

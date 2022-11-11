@@ -41,8 +41,12 @@ namespace m1
         GameManager::UI my_UI;
         float progressBarIncrement = 0.0f;
         float progressBarGoal = 0.0f;
-        int ducksWantedToKill = 5;
+        int ducksWantedToKill = 15;
+        int ducksKilled = 0;
         float progressBarIncrementStatus = 0.0f;
+        float duckSpeedIncrease = 250.0f;
+        bool pauseGame = false;
+        bool duckDead = false;
     };
 }   // namespace m1
 

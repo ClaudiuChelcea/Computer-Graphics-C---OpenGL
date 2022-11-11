@@ -219,6 +219,13 @@ float Duck::getSpeed()
 	return Speed;
 }
 
+// Speed
+float Duck::getInitialSpeed()
+{
+	return 300.0f;
+}
+
+
 // Direction
 float Duck::getTranslateX()
 {
