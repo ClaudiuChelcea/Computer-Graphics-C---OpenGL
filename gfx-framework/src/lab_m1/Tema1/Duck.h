@@ -27,7 +27,7 @@ private:
 
 	// Head
 	Mesh* head { NULL }; // The head of the duck
-	std::pair<float, float> headBodyOffset{ -45.0f, -40.0f };
+	std::pair<float, float> headBodyOffset{ -45.0f, -30.0f };
 
 	// Beak
 	Mesh* beak { NULL }; // The beak of the duck
@@ -36,6 +36,18 @@ private:
 	// Hitbox
 	Mesh* hitbox { NULL }; // The beak of the duck
 	std::pair<float, float> hitboxBodyOffset{ 100.0f, 100.0f };
+
+	// Eye left
+	Mesh* eyeLeft{ NULL }; // The left eye of the duck
+	std::pair<float, float> eyeLeftBodyOffset{ -45.0f, -50.0f };
+	Mesh* eyeLeftPupil{ NULL }; // The left eye of the duck
+	std::pair<float, float> eyeLeftBodyOffsetPupil{ -45.0f, -50.0f };
+	
+	// Eye right
+	Mesh* eyeRight{ NULL }; // The right eye of the duck
+	std::pair<float, float> eyeRightBodyOffset{ -70.0f, -30.0f };
+	Mesh* eyeRightPupil{ NULL }; // The right eye of the duck
+	std::pair<float, float> eyeRightBodyOffsetPupil{ -70.0f, -30.0f };
 
 	// Speed
 	float Speed{ 300.0f };
@@ -96,6 +108,22 @@ public:
 	Mesh* getHitbox();
 	std::string getHitboxString();
 	std::pair<float, float> getHitboxBodyOffset();
+
+	// Eye left
+	Mesh* getEyeLeft();
+	std::string getEyeLeftString();
+	std::pair<float, float> getEyeLeftBodyOffset();
+	Mesh* getEyeLeftPupil();
+	std::string getEyeLeftStringPupil();
+	std::pair<float, float> getEyeLeftBodyOffsetPupil();
+
+	// Eye right
+	Mesh* getEyeRightPupil();
+	std::string getEyeRightStringPupil();
+	std::pair<float, float> getEyeRightBodyOffsetPupil();
+	Mesh* getEyeRight();
+	std::string getEyeRightString();
+	std::pair<float, float> getEyeRightBodyOffset();
 
 	// Speed
 	float getSpeed();

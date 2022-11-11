@@ -16,10 +16,18 @@ void Duck::createDuck()
 	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Create beak
-	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.64f, 1.0f, 0.0f));
+	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 25.0f, glm::vec3(0.64f, 1.0f, 0.0f));
 
 	// Create hitbox
 	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 130.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
+	// Create eyeLeft
+	this->eyeLeft = Circle::CreateCircle("eyeLeft", glm::vec3(0.0f, 0.0f, 0.0f), 10.0f, 100.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	this->eyeLeftPupil = Circle::CreateCircle("eyeLeftPupil", glm::vec3(0.0f, 0.0f, 0.0f), 5.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	// Create eyeRight
+	this->eyeRight = Circle::CreateCircle("eyeRight", glm::vec3(0.0f, 0.0f, 0.0f), 10.0f, 100.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+	this->eyeRightPupil = Circle::CreateCircle("eyeRightPupil", glm::vec3(0.0f, 0.0f, 0.0f), 5.0f, 100.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Calculate gravity center
 	gravityCenter.first = (0 + 125) / 2;
@@ -141,6 +149,68 @@ std::string Duck::getHitboxString()
 std::pair<float, float> Duck::getHitboxBodyOffset()
 {
 	return this->hitboxBodyOffset;
+}
+
+// Eye left
+Mesh* Duck::getEyeLeft()
+{
+	return eyeLeft;
+}
+
+std::string Duck::getEyeLeftString()
+{
+	return "eyeLeft";
+}
+
+std::pair<float, float> Duck::getEyeLeftBodyOffset()
+{
+	return eyeLeftBodyOffset;
+}
+
+Mesh* Duck::getEyeLeftPupil()
+{
+	return eyeLeftPupil;
+}
+
+std::string Duck::getEyeLeftStringPupil()
+{
+	return "eyeLeftPupil";
+}
+
+std::pair<float, float> Duck::getEyeLeftBodyOffsetPupil()
+{
+	return eyeLeftBodyOffsetPupil;
+}
+
+// Eye right
+Mesh* Duck::getEyeRight()
+{
+	return eyeRight;
+}
+
+std::string Duck::getEyeRightString()
+{
+	return "eyeRight";
+}
+
+std::pair<float, float> Duck::getEyeRightBodyOffset()
+{
+	return eyeRightBodyOffset;
+}
+
+Mesh* Duck::getEyeRightPupil()
+{
+	return eyeRightPupil;
+}
+
+std::string Duck::getEyeRightStringPupil()
+{
+	return "eyeRightPupil";
+}
+
+std::pair<float, float> Duck::getEyeRightBodyOffsetPupil()
+{
+	return eyeRightBodyOffsetPupil;
 }
 
 // Speed

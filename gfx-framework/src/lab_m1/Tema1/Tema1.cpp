@@ -37,7 +37,7 @@ void Tema1::Init()
     int spawnPointIndex = rand() % my_duck_manager.getSpawnPoints().size();
     my_duck_manager.setSpawnPoint(my_duck_manager.getSpawnPoints().at(spawnPointIndex));
    
-    // Add meshes
+    // Create duck
     my_duck_manager.createDuck(std::make_pair(my_duck_manager.getSpawnPoint().first, my_duck_manager.getSpawnPoint().second));
     my_duck_manager.getDuckAlive();
     AddMeshToList(my_duck_manager.getDuckAlive()->getBody());
@@ -46,6 +46,10 @@ void Tema1::Init()
     AddMeshToList(my_duck_manager.getDuckAlive()->getHead());
     AddMeshToList(my_duck_manager.getDuckAlive()->getBeak());
     AddMeshToList(my_duck_manager.getDuckAlive()->getHitbox());
+    AddMeshToList(my_duck_manager.getDuckAlive()->getEyeLeft());
+    AddMeshToList(my_duck_manager.getDuckAlive()->getEyeLeftPupil());
+    AddMeshToList(my_duck_manager.getDuckAlive()->getEyeRight());
+    AddMeshToList(my_duck_manager.getDuckAlive()->getEyeRightPupil());
 
     // Create model matrix
     modelMatrix = glm::mat3 { 1 };
@@ -252,6 +256,26 @@ void Tema1::Update(float deltaTimeSeconds)
     body_part *= transform2D::Translate(-65, -100);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHitboxString()], shaders["VertexColor"], body_part);
     #endif
+
+    // Eye left
+    body_part = modelMatrix;
+    body_part *= transform2D::Scale(0.4f, 0.4f);
+    body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getEyeLeftBodyOffsetPupil().first, my_duck_manager.getDuckAlive()->getEyeLeftBodyOffsetPupil().second);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getEyeLeftStringPupil()], shaders["VertexColor"], body_part);
+    body_part = modelMatrix;
+    body_part *= transform2D::Scale(0.4f, 0.4f);
+    body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getEyeLeftBodyOffset().first, my_duck_manager.getDuckAlive()->getEyeLeftBodyOffset().second);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getEyeLeftString()], shaders["VertexColor"], body_part);
+
+    // Eye right
+    body_part = modelMatrix;
+    body_part *= transform2D::Scale(0.4f, 0.4f);
+    body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getEyeRightBodyOffsetPupil().first, my_duck_manager.getDuckAlive()->getEyeRightBodyOffsetPupil().second);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getEyeRightStringPupil()], shaders["VertexColor"], body_part);
+    body_part = modelMatrix;
+    body_part *= transform2D::Scale(0.4f, 0.4f);
+    body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getEyeRightBodyOffset().first, my_duck_manager.getDuckAlive()->getEyeRightBodyOffset().second);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getEyeRightString()], shaders["VertexColor"], body_part);
 
     // Create head
     body_part = modelMatrix;
