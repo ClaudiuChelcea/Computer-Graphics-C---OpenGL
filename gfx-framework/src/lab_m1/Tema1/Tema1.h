@@ -39,6 +39,10 @@ namespace m1
         GameManager::DuckManager my_duck_manager; // manage ducks
         glm::ivec2 resolution; // window resolution
         GameManager::UI my_UI;
+        float progressBarIncrement = 0.0f;
+        float progressBarGoal = 0.0f;
+        int ducksWantedToKill = 5;
+        float progressBarIncrementStatus = 0.0f;
     };
 }   // namespace m1
 

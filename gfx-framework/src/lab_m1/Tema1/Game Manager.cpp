@@ -70,6 +70,10 @@ UI::UI()
 
 	// Create bullet 3
 	this->bullet3 = Rectangle::CreateRectangle("bullet3", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 25.0f, glm::vec3(0.0f, 0.0f, 0.0f), false);
+
+	// Create healthbar
+	this->healthBarBorder = Rectangle::CreateRectangle("healthBarBorder", glm::vec3(0.0f, 0.0f, 0.0f), 25.0f, 225.0f, glm::vec3(0.0f, 0.0f, 0.0f), false);
+	this->healthProgressBar = Rectangle::CreateRectangle("healthProgressBar", glm::vec3(0.0f, 0.0f, 0.0f), 20.0f, 0.0f, glm::vec3(1.0f, 1.0f, 1.0f), true);
 }
 
 // Ground
@@ -154,4 +158,35 @@ Mesh* UI::getBullet3()
 std::string UI::getBullet3String()
 {
 	return "bullet3";
+}
+
+// Healthbar
+Mesh* UI::gethealthBarBorder()
+{
+	return healthBarBorder;
+}
+
+std::string UI::gethealthBarBorderString()
+{
+	return "healthBarBorder";
+}
+
+Mesh* UI::gethealthProgressBar()
+{
+	return healthProgressBar;
+}
+
+Mesh** UI::gethealthProgressBarReference()
+{
+	return &healthProgressBar;
+}
+
+std::string UI::gethealthProgressBarString()
+{
+	return "healthProgressBar";
+}
+
+float UI::getProgressBarMaxVal()
+{
+	return progress_bar_max_val;
 }

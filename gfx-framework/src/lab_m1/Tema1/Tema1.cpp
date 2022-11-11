@@ -7,7 +7,7 @@ Tema1::Tema1() = default;
 Tema1::~Tema1() = default;
 
 #define SHOW_HITBOX true
-#define SHOW_GROUND false
+#define SHOW_GROUND true
 
 void Tema1::Init()
 {
@@ -28,7 +28,7 @@ void Tema1::Init()
 
     // Create list of spawnpoints
     for (int yPos = 50; yPos <= 100; yPos = yPos + 10) {
-        for (int xPos = 125; xPos <= 600; xPos = xPos + 25) {
+        for (int xPos = 200; xPos <= 600; xPos = xPos + 25) {
             my_duck_manager.getSpawnPoints().push_back(std::make_pair(xPos, yPos));
         }
     }
@@ -75,11 +75,17 @@ void Tema1::Init()
     AddMeshToList(my_UI.getBullet1());
     AddMeshToList(my_UI.getBullet2());
     AddMeshToList(my_UI.getBullet3());
+    AddMeshToList(my_UI.gethealthBarBorder());
+    AddMeshToList(my_UI.gethealthProgressBar());
+
+    // Progress bar
+    progressBarGoal = 217.0f;
+    ducksWantedToKill = 5;
+    progressBarIncrement = progressBarGoal / ducksWantedToKill;
 }
 
 void Tema1::FrameStart()
 {
-    std::cout << my_duck_manager.getSpawnPoint().first + my_duck_manager.getDuckAlive()->getTranslateX() << " " << my_duck_manager.getSpawnPoint().second + my_duck_manager.getDuckAlive()->getTranslateY() << std::endl;
     // Clears the color buffer (using the previously set color) and depth buffer
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -131,6 +137,12 @@ void Tema1::Update(float deltaTimeSeconds)
     if (my_duck_manager.getDuckAlive()->getBulletsCount() >= 1) {
         RenderMesh2D(meshes[my_UI.getBullet3String()], shaders["VertexColor"], body_part);
     }
+
+    // Healthbar
+    body_part *= transform2D::Translate(-200.0f, -50.0f);
+    RenderMesh2D(meshes[my_UI.gethealthBarBorderString()], shaders["VertexColor"], body_part);
+    body_part *= transform2D::Translate(4.0f, 2.5f);
+    RenderMesh2D(meshes[my_UI.gethealthProgressBarString()], shaders["VertexColor"], body_part);
 
     // Increment time
     my_duck_manager.getDuckAlive()->setTimeAlive(my_duck_manager.getDuckAlive()->getTimeAlive() + deltaTimeSeconds);
@@ -314,8 +326,9 @@ void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
 {
     // If we have bullets
     if (my_duck_manager.getDuckAlive()->getBulletsCount() > 0 && my_duck_manager.getDuckAlive()->getEvading() == false) {
-        // Reduce the number of bullets
-        my_duck_manager.getDuckAlive()->setBulletsCount(my_duck_manager.getDuckAlive()->getBulletsCount() - 1);
+        // Reduce the number of bullets (if the duck was not shot already)
+        if(my_duck_manager.getDuckAlive()->getWasShot() == false)
+            my_duck_manager.getDuckAlive()->setBulletsCount(my_duck_manager.getDuckAlive()->getBulletsCount() - 1);
 
         // Check if we also kill duck
         float leftBottomCornerX = my_duck_manager.getSpawnPoint().first + my_duck_manager.getDuckAlive()->getTranslateX() - 65;
@@ -330,6 +343,19 @@ void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
         
         // Mouse Y is 0 to 720 from bottom to top
         if (mouseX >= leftBottomCornerX && mouseX <= rightBottomCornerX && mouseY >= 670 - leftTopCornerY && mouseY <= 670 - leftBottomCornerY) {
+            // Update progress bar
+            if (my_duck_manager.getDuckAlive()->getWasShot() == false) {
+                if (progressBarIncrementStatus < progressBarGoal) {
+                    progressBarIncrementStatus += progressBarIncrement;
+                    *my_UI.gethealthProgressBarReference() = Rectangle::CreateRectangle("healthProgressBar", glm::vec3(0.0f, 0.0f, 0.0f), 20.0f, progressBarIncrementStatus, glm::vec3(1.0f, 1.0f, 1.0f), true);
+                    AddMeshToList(my_UI.gethealthProgressBar());
+                }
+                else {
+                    // Goal reached
+                }
+            }
+
+            // Mark the duck as shot
             my_duck_manager.getDuckAlive()->setWasShot(true);
         }
     }
