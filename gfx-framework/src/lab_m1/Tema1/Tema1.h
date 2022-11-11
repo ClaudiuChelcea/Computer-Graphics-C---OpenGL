@@ -38,6 +38,7 @@ namespace m1
         glm::mat3 modelMatrix; // modelMatrix for rendering shapes
         GameManager::DuckManager my_duck_manager; // manage ducks
         glm::ivec2 resolution; // window resolution
+        GameManager::UI my_UI;
     };
 }   // namespace m1
 

@@ -18,7 +18,7 @@ namespace Rectangle
      * @param color the color used for the rectangle
      * @result A rectangle mesh
      */
-    Mesh* CreateRectangle(const std::string& rectangle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, float height = 0.0f, float width = 0.0f, glm::vec3 color = { 0.0f, 0.0f, 0.0f });
+    Mesh* CreateRectangle(const std::string& rectangle_name = "", glm::vec3 Corner = { 0.0f, 0.0f, 0.0f }, float height = 0.0f, float width = 0.0f, glm::vec3 color = { 0.0f, 0.0f, 0.0f }, bool fill = false);
 }
 
 #endif // __RECTANGLE_H_

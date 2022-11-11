@@ -9,7 +9,7 @@
  * @param color the color used for the rectangle
  * @result A rectangle mesh
  */
-Mesh* Rectangle::CreateRectangle(const std::string& rectangle_name, glm::vec3 Corner, float height, float length, glm::vec3 color)
+Mesh* Rectangle::CreateRectangle(const std::string& rectangle_name, glm::vec3 Corner, float height, float length, glm::vec3 color, bool fill)
 {
     // Create mesh
     Mesh* rectangle = new Mesh(rectangle_name);
@@ -17,10 +17,10 @@ Mesh* Rectangle::CreateRectangle(const std::string& rectangle_name, glm::vec3 Co
     // Set vertices
     std::vector<VertexFormat> vertices =
     {
-        VertexFormat(Corner, glm::vec3(0,1,0)),
-        VertexFormat(Corner + glm::vec3(length, 0, 0), glm::vec3(0,1,0)),
-        VertexFormat(Corner + glm::vec3(length, height, 0), glm::vec3(0,1,0)),
-        VertexFormat(Corner + glm::vec3(0, height, 0), glm::vec3(0,1,0))
+        VertexFormat(Corner, color),
+        VertexFormat(Corner + glm::vec3(length, 0, 0), color),
+        VertexFormat(Corner + glm::vec3(length, height, 0), color),
+        VertexFormat(Corner + glm::vec3(0, height, 0), color)
     };
 
     std::vector<unsigned int> indices;
@@ -29,7 +29,14 @@ Mesh* Rectangle::CreateRectangle(const std::string& rectangle_name, glm::vec3 Co
     }
 
     // Draw rectangle
-    rectangle->SetDrawMode(GL_LINE_LOOP);
+    if (!fill) {
+        rectangle->SetDrawMode(GL_LINE_LOOP);
+    }
+    else {
+        // Draw 2 triangles. Add the remaining 2 indices
+        indices.push_back(0);
+        indices.push_back(2);
+    }
     rectangle->InitFromData(vertices, indices);
 
     return rectangle;

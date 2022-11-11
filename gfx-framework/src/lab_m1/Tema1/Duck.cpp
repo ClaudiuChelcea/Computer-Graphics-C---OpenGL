@@ -4,22 +4,22 @@
 void Duck::createDuck()
 {
 	// Create body
-	this->body = Triangle::CreateTriangle("body", glm::vec3 (0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0, 0.74f, 1.0f));
+	this->body = Triangle::CreateTriangle("body", glm::vec3 (0.0f, 0.0f, 0.0f), 90.0f, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create wingLeft
-	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.4f, 0.6f, 0.4f));
+	this->wingLeft = Triangle::CreateTriangle("wingLeft", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Create wingRight
-	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.4f, 0.6f, 0.4f));
+	this->wingRight = Triangle::CreateTriangle("wingRight", glm::vec3(0.0f, 0.0f, 0.0f), 45.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Create head
-	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f, glm::vec3(0.8f, 0.1f, 0.9f));
+	this->head = Circle::CreateCircle("head", glm::vec3(0.0f, 0.0f, 0.0f), 50.0f, 100.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Create beak
-	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.6f, 0.3f, 0.8f));
+	this->beak = Triangle::CreateTriangle("beak", glm::vec3(0.0f, 0.0f, 0.0f), 15.0f, glm::vec3(0.64f, 1.0f, 0.0f));
 
 	// Create hitbox
-	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 130.0f, 130.0f, glm::vec3(0.6f, 0.3f, 0.8f));
+	this->hitbox = Rectangle::CreateRectangle("hitbox", glm::vec3(0.0f, 0.0f, 0.0f), 180.0f, 130.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	// Calculate gravity center
 	gravityCenter.first = (0 + 125) / 2;
@@ -28,7 +28,8 @@ void Duck::createDuck()
 
 /* Getters */
 // Body
-Mesh* Duck::getBody() {
+Mesh* Duck::getBody()
+{
 	return body;
 }
 
@@ -46,12 +47,24 @@ float Duck::getBodyRotation() {
 	return this->bodyRotation;
 }
 
-std::pair<int, int> Duck::getDuckWidth() { return duckWidth; }
-std::pair<int, int> Duck::getDuckHeight() { return duckHeight; }
-std::pair<float, float> Duck::getGravityCenter() { return gravityCenter; }
+std::pair<int, int> Duck::getDuckWidth()
+{
+	return duckWidth;
+}
+
+std::pair<int, int> Duck::getDuckHeight()
+{
+	return duckHeight;
+}
+
+std::pair<float, float> Duck::getGravityCenter()
+{
+	return gravityCenter;
+}
 
 // Wing Left
-Mesh* Duck::getWingLeft() {
+Mesh* Duck::getWingLeft()
+{
 	return wingLeft;
 }
 
@@ -66,7 +79,8 @@ std::string Duck::getWingLeftString()
 }
 
 // Wing Right
-Mesh* Duck::getWingRight() {
+Mesh* Duck::getWingRight()
+{
 	return wingRight;
 }
 
@@ -82,7 +96,8 @@ std::pair<float, float> Duck::getRightWingBodyOffset()
 }
 
 // Head
-Mesh* Duck::getHead() {
+Mesh* Duck::getHead()
+{
 	return head;
 }
 
@@ -97,7 +112,8 @@ std::pair<float, float> Duck::getHeadBodyOffset()
 }
 
 // Beak
-Mesh* Duck::getBeak() {
+Mesh* Duck::getBeak()
+{
 	return beak;
 }
 
@@ -112,12 +128,13 @@ std::pair<float, float> Duck::getBeakBodyOffset()
 }
 
 // Hitbox
-Mesh* Duck::getHitbox() {
+Mesh* Duck::getHitbox()
+{
 	return hitbox;
 }
 
 std::string Duck::getHitboxString()
-{
+{ 
 	return std::string("hitbox");
 }
 
@@ -127,15 +144,62 @@ std::pair<float, float> Duck::getHitboxBodyOffset()
 }
 
 // Speed
-float Duck::getSpeed() { return Speed; }
+float Duck::getSpeed()
+{
+	return Speed;
+}
 
 // Direction
-float Duck::getTranslateX() { return translateX; }
-float Duck::getTranslateY() { return translateY; }
+float Duck::getTranslateX()
+{
+	return translateX;
+}
+float Duck::getTranslateY()
+{
+	return translateY;
+}
 
 // Orientation
-float Duck::getTravellingAngle() { return travellingAngle; }
-float Duck::getDuckAngle() { return duckAngle; }
+float Duck::getTravellingAngle()
+{
+	return travellingAngle;
+}
+
+float Duck::getDuckAngle()
+{
+	return duckAngle;
+}
+
+// Status
+float Duck::getTimeAlive()
+{
+	return timeAlive;
+}
+
+float Duck::getTimeAliveLimit()
+{
+	return timeAliveLimit;
+}
+
+int Duck::getLivesCount()
+{
+	return livesCount;
+}
+
+int Duck::getBulletsCount()
+{
+	return bulletsCount;
+}
+
+bool Duck::getWasShot()
+{
+	return wasShot;
+}
+
+bool Duck::getEvading()
+{
+	return evading;
+}
 
 /* Setters */
 // Body
@@ -157,13 +221,60 @@ void Duck::setGravityCenter(std::pair<float, float> _gravity_center)
 }
 
 // Speed
-void Duck::setSpeed(float _Speed) { Speed = _Speed; }
+void Duck::setSpeed(float _Speed)
+{
+	Speed = _Speed;
+}
 
 // Direction
-void Duck::setTranslateX(float _translateX) { translateX = _translateX; };
-void Duck::setTranslateY(float _translateY) { translateY = _translateY; };
+void Duck::setTranslateX(float _translateX)
+{
+	translateX = _translateX;
+}
+
+void Duck::setTranslateY(float _translateY)
+{
+	translateY = _translateY;
+}
 
 // Orientation
-void Duck::setTravellingAngle(float _travellingAngle) { travellingAngle = _travellingAngle; }
-void Duck::setDuckAngle(float _duckAngle) { duckAngle = _duckAngle; }
+void Duck::setTravellingAngle(float _travellingAngle)
+{
+	travellingAngle = _travellingAngle;
+}
 
+void Duck::setDuckAngle(float _duckAngle)
+{
+	duckAngle = _duckAngle;
+}
+
+// Status
+void Duck::setTimeAlive(float _timeAlive)
+{
+	timeAlive = _timeAlive;
+}
+
+void Duck::setTimeAliveLimit(float _timeAliveLimit)
+{
+	timeAliveLimit = _timeAliveLimit;
+}
+
+void Duck::setLivesCount(int _livesCount)
+{
+	livesCount = _livesCount;
+}
+
+void Duck::setBulletsCount(int _bulletsCount)
+{
+	bulletsCount = _bulletsCount;
+}
+
+void Duck::setWasShot(bool _wasShot)
+{
+	wasShot = _wasShot;
+}
+
+void Duck::setEvading(bool _evading)
+{
+	evading = _evading;
+}

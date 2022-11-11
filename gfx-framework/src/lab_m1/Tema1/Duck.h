@@ -35,7 +35,7 @@ private:
 
 	// Hitbox
 	Mesh* hitbox { NULL }; // The beak of the duck
-	std::pair<float, float> hitboxBodyOffset{ -40.0f, -40.0f };
+	std::pair<float, float> hitboxBodyOffset{ 100.0f, 100.0f };
 
 	// Speed
 	float Speed{ 300.0f };
@@ -48,6 +48,13 @@ private:
 	float travellingAngle{ 45 };
 	float duckAngle{ 180 };
 
+	// Status
+	float timeAlive = 0.0f;
+	float timeAliveLimit = 8.0f;
+	int livesCount = 3;
+	int bulletsCount = 3;
+	bool wasShot = false;
+	bool evading = false;
 public:
 	// Constructor
 	Duck() = default;
@@ -100,6 +107,14 @@ public:
 	// Orientation
 	float getTravellingAngle();
 	float getDuckAngle();
+
+	// Status
+	float getTimeAlive();
+	float getTimeAliveLimit();
+	int getLivesCount();
+	int getBulletsCount();
+	bool getWasShot();
+	bool getEvading();
 	
 	/* Setters */
 	// Body
@@ -117,6 +132,14 @@ public:
 	// Orientation
 	void setTravellingAngle(float _travellingAngle);
 	void setDuckAngle(float _duckAngle);
+
+	// Status
+	void setTimeAlive(float _timeAlive);
+	void setTimeAliveLimit(float _timeAliveLimit);
+	void setLivesCount(int _livesCount);
+	void setBulletsCount(int _bulletsCount);
+	void setWasShot(bool _wasShot);
+	void setEvading(bool _evading);
 };
 
 #endif // __DUCK_H

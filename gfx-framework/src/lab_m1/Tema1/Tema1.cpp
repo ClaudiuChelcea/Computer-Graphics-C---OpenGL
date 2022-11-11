@@ -6,6 +6,9 @@ using namespace m1;
 Tema1::Tema1() = default;
 Tema1::~Tema1() = default;
 
+#define SHOW_HITBOX true
+#define SHOW_GROUND false
+
 void Tema1::Init()
 {
     // Set window
@@ -24,18 +27,16 @@ void Tema1::Init()
     srand(time(NULL));
 
     // Create list of spawnpoints
-    for (int yPos = 25; yPos <= 100; yPos = yPos + 25) {
-        for (int xPos = 125; xPos <= 900; xPos = xPos + 25) {
+    for (int yPos = 50; yPos <= 100; yPos = yPos + 10) {
+        for (int xPos = 125; xPos <= 600; xPos = xPos + 25) {
             my_duck_manager.getSpawnPoints().push_back(std::make_pair(xPos, yPos));
         }
     }
 
     // Set an initial random spawn point from the list
     int spawnPointIndex = rand() % my_duck_manager.getSpawnPoints().size();
-    std::cout << spawnPointIndex << std::endl;
     my_duck_manager.setSpawnPoint(my_duck_manager.getSpawnPoints().at(spawnPointIndex));
    
-    std::cout << my_duck_manager.getSpawnPoint().first << " " << my_duck_manager.getSpawnPoint().second << std::endl;
     // Add meshes
     my_duck_manager.createDuck(std::make_pair(my_duck_manager.getSpawnPoint().first, my_duck_manager.getSpawnPoint().second));
     my_duck_manager.getDuckAlive();
@@ -63,13 +64,22 @@ void Tema1::Init()
         movingAngle = rand() % 110 + 25;
     }
     my_duck_manager.getDuckAlive()->setTravellingAngle(movingAngle);
-    std::cout << movingAngle;
-
     my_duck_manager.getDuckAlive()->setDuckAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() + 135);
+
+    // Create UI
+    AddMeshToList(my_UI.getGround());
+    AddMeshToList(my_UI.getSky());
+    AddMeshToList(my_UI.getLife1());
+    AddMeshToList(my_UI.getLife2());
+    AddMeshToList(my_UI.getLife3());
+    AddMeshToList(my_UI.getBullet1());
+    AddMeshToList(my_UI.getBullet2());
+    AddMeshToList(my_UI.getBullet3());
 }
 
 void Tema1::FrameStart()
 {
+    std::cout << my_duck_manager.getSpawnPoint().first + my_duck_manager.getDuckAlive()->getTranslateX() << " " << my_duck_manager.getSpawnPoint().second + my_duck_manager.getDuckAlive()->getTranslateY() << std::endl;
     // Clears the color buffer (using the previously set color) and depth buffer
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -82,6 +92,121 @@ void Tema1::FrameStart()
 
 void Tema1::Update(float deltaTimeSeconds)
 {
+    // Ground
+    glm::mat3 body_part = glm::mat3(1);
+    #if SHOW_GROUND
+    RenderMesh2D(meshes[my_UI.getGroundString()], shaders["VertexColor"], body_part);
+    #endif
+
+    // Lives
+    body_part = glm::mat3(1);
+    body_part = transform2D::Translate(1025.0f, 650.0f);
+    if (my_duck_manager.getDuckAlive()->getLivesCount() >= 3) {
+        RenderMesh2D(meshes[my_UI.getLife1String()], shaders["VertexColor"], body_part);
+    }
+
+    body_part *= transform2D::Translate(100.0f, 0.0f);
+    if (my_duck_manager.getDuckAlive()->getLivesCount() >= 2) {
+        RenderMesh2D(meshes[my_UI.getLife2String()], shaders["VertexColor"], body_part);
+    }
+
+    body_part *= transform2D::Translate(100.0f, 0.0f);
+    if (my_duck_manager.getDuckAlive()->getLivesCount() >= 1) {
+        RenderMesh2D(meshes[my_UI.getLife3String()], shaders["VertexColor"], body_part);
+    }
+
+    // Bullets
+    body_part = glm::mat3(1);
+    body_part = transform2D::Translate(1015.0f, 550.0f);
+    if (my_duck_manager.getDuckAlive()->getBulletsCount() >= 3) {
+        RenderMesh2D(meshes[my_UI.getBullet1String()], shaders["VertexColor"], body_part);
+    }
+
+    body_part *= transform2D::Translate(100.0f, 0.0f);
+    if (my_duck_manager.getDuckAlive()->getBulletsCount() >= 2) {
+        RenderMesh2D(meshes[my_UI.getBullet2String()], shaders["VertexColor"], body_part);
+    }
+
+    body_part *= transform2D::Translate(100.0f, 0.0f);
+    if (my_duck_manager.getDuckAlive()->getBulletsCount() >= 1) {
+        RenderMesh2D(meshes[my_UI.getBullet3String()], shaders["VertexColor"], body_part);
+    }
+
+    // Increment time
+    my_duck_manager.getDuckAlive()->setTimeAlive(my_duck_manager.getDuckAlive()->getTimeAlive() + deltaTimeSeconds);
+
+    // Evading
+    if (my_duck_manager.getDuckAlive()->getTimeAlive() > my_duck_manager.getDuckAlive()->getTimeAliveLimit()) {
+        // Go up
+        my_duck_manager.getDuckAlive()->setEvading(true);
+        my_duck_manager.getDuckAlive()->setTravellingAngle(90);
+        my_duck_manager.getDuckAlive()->setDuckAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() + 135);
+
+        // After it disappears, revive it elsewhere
+        if (my_duck_manager.getDuckAlive()->getTranslateY() + my_duck_manager.getDuckAlive()->getGravityCenter().second - 150 > resolution.y) {
+
+            // Set orientation
+            int movingAngle = rand() % 110 + 25;
+            while (movingAngle >= 85 && movingAngle <= 95) {
+                movingAngle = rand() % 110 + 25;
+            }
+            my_duck_manager.getDuckAlive()->setTravellingAngle(movingAngle);
+            my_duck_manager.getDuckAlive()->setDuckAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() + 135);
+
+            // Set position
+            int spawnPointIndex = rand() % my_duck_manager.getSpawnPoints().size();
+            my_duck_manager.setSpawnPoint(my_duck_manager.getSpawnPoints().at(spawnPointIndex));
+            my_duck_manager.getDuckAlive()->setTranslateX(my_duck_manager.getSpawnPoint().first);
+            my_duck_manager.getDuckAlive()->setTranslateY(my_duck_manager.getSpawnPoint().second);
+
+            // Lose life (only if it was not was)
+            my_duck_manager.getDuckAlive()->setLivesCount(my_duck_manager.getDuckAlive()->getLivesCount() - 1);
+
+            // Reset bullets
+            my_duck_manager.getDuckAlive()->setBulletsCount(3);
+
+            // Reset time
+            my_duck_manager.getDuckAlive()->setTimeAlive(0.0f);
+
+            // Reset evading
+            my_duck_manager.getDuckAlive()->setEvading(false);
+        }
+    }
+
+    // Shot
+    if (my_duck_manager.getDuckAlive()->getWasShot() == true && my_duck_manager.getDuckAlive()->getEvading() == false) { // Duck is dead
+        // Falling down
+        my_duck_manager.getDuckAlive()->setTravellingAngle(-90);
+        my_duck_manager.getDuckAlive()->setDuckAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() + 135);
+
+        // After it disappears, revive it elsewhere
+        if (my_duck_manager.getDuckAlive()->getTranslateY() + my_duck_manager.getDuckAlive()->getGravityCenter().second + 150 < 0) {
+            
+            // Set orientation
+            int movingAngle = rand() % 110 + 25;
+            while (movingAngle >= 85 && movingAngle <= 95) {
+                movingAngle = rand() % 110 + 25;
+            }
+            my_duck_manager.getDuckAlive()->setTravellingAngle(movingAngle);
+            my_duck_manager.getDuckAlive()->setDuckAngle(my_duck_manager.getDuckAlive()->getTravellingAngle() + 135);
+
+            // Set position
+            int spawnPointIndex = rand() % my_duck_manager.getSpawnPoints().size();
+            my_duck_manager.setSpawnPoint(my_duck_manager.getSpawnPoints().at(spawnPointIndex));
+            my_duck_manager.getDuckAlive()->setTranslateX(my_duck_manager.getSpawnPoint().first);
+            my_duck_manager.getDuckAlive()->setTranslateY(my_duck_manager.getSpawnPoint().second);
+
+            // Reset status
+            my_duck_manager.getDuckAlive()->setWasShot(false);
+
+            // Reset bullets
+            my_duck_manager.getDuckAlive()->setBulletsCount(3);
+             
+            // Reset time
+            my_duck_manager.getDuckAlive()->setTimeAlive(0.0f);
+        }
+    }
+
     // Calculate gravity center
     my_duck_manager.getDuckAlive()->setGravityCenter(std::make_pair(my_duck_manager.getSpawnPoint().first, my_duck_manager.getSpawnPoint().second));
 
@@ -108,8 +233,16 @@ void Tema1::Update(float deltaTimeSeconds)
     modelMatrix *= transform2D::Translate(-my_duck_manager.getDuckAlive()->getGravityCenter().first + my_duck_manager.getSpawnPoint().first, -my_duck_manager.getDuckAlive()->getGravityCenter().second + my_duck_manager.getSpawnPoint().second);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBodyString()], shaders["VertexColor"], modelMatrix);
 
+    // Hitbox
+    #if SHOW_HITBOX
+    body_part = modelMatrix;
+    body_part *= transform2D::Rotate(GameManager::myMath::degreesToRadians(-45));
+    body_part *= transform2D::Translate(-65, -100);
+    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHitboxString()], shaders["VertexColor"], body_part);
+    #endif
+
     // Create head
-    glm::mat3 body_part = modelMatrix;
+    body_part = modelMatrix;
     body_part *= transform2D::Scale(0.4f, 0.4f);
     body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHeadBodyOffset().first, my_duck_manager.getDuckAlive()->getHeadBodyOffset().second);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHeadString()], shaders["VertexColor"], body_part);
@@ -147,10 +280,10 @@ void Tema1::Update(float deltaTimeSeconds)
     body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getBeakBodyOffset().first, my_duck_manager.getDuckAlive()->getBeakBodyOffset().second);
     RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getBeakString()], shaders["VertexColor"], body_part);
 
-    // Hitbox
-    body_part = modelMatrix;
-    body_part *= transform2D::Translate(my_duck_manager.getDuckAlive()->getHitboxBodyOffset().first, my_duck_manager.getDuckAlive()->getHitboxBodyOffset().second);
-    RenderMesh2D(meshes[my_duck_manager.getDuckAlive()->getHitboxString()], shaders["VertexColor"], body_part);
+    // Sky
+    body_part = glm::mat3(1);
+    body_part = transform2D::Translate(0.0f, 300.0f);
+    RenderMesh2D(meshes[my_UI.getSkyString()], shaders["VertexColor"], body_part);
 }
 
 void Tema1::FrameEnd()
@@ -179,6 +312,27 @@ void Tema1::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 
 void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
 {
+    // If we have bullets
+    if (my_duck_manager.getDuckAlive()->getBulletsCount() > 0 && my_duck_manager.getDuckAlive()->getEvading() == false) {
+        // Reduce the number of bullets
+        my_duck_manager.getDuckAlive()->setBulletsCount(my_duck_manager.getDuckAlive()->getBulletsCount() - 1);
+
+        // Check if we also kill duck
+        float leftBottomCornerX = my_duck_manager.getSpawnPoint().first + my_duck_manager.getDuckAlive()->getTranslateX() - 65;
+        float leftBottomCornerY = my_duck_manager.getSpawnPoint().second + my_duck_manager.getDuckAlive()->getTranslateY() - 100;
+        float rightBottomCornerX = leftBottomCornerX + 130; // Add hitbox width
+        float rightBottomCornerY = leftBottomCornerY;
+
+        float leftTopCornerX = leftBottomCornerX;
+        float leftTopCornerY = leftBottomCornerY + 180; // Add height
+        float rightTopCornerX = rightBottomCornerX;
+        float rightTopCornerY = rightBottomCornerY + 180; // Add height
+        
+        // Mouse Y is 0 to 720 from bottom to top
+        if (mouseX >= leftBottomCornerX && mouseX <= rightBottomCornerX && mouseY >= 670 - leftTopCornerY && mouseY <= 670 - leftBottomCornerY) {
+            my_duck_manager.getDuckAlive()->setWasShot(true);
+        }
+    }
 }
 
 

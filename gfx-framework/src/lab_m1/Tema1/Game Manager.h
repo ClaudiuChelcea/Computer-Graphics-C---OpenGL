@@ -21,7 +21,7 @@ namespace GameManager
 			DuckManager() {}; 
 
 			// create a duck (only one can exist at a time)
-			void createDuck(std::pair<float, float> startingBodyPosition);
+			void createDuck(std::pair<float, float> startingBodyPosition = { 0.0f, 0.0f });
 
 			// Getters
 			Duck* getDuckAlive();
@@ -50,7 +50,45 @@ namespace GameManager
 			// Ground
 			Mesh* ground;
 
+			// Sky
+			Mesh* sky;
+
+			// Lives
+			Mesh* life1;
+			Mesh* life2;
+			Mesh* life3;
+
+			// Bullets
+			Mesh* bullet1;
+			Mesh* bullet2;
+			Mesh* bullet3;
 		public:
+			UI(); // create the whole UI
+			
+			/* Getters */
+			// Ground
+			Mesh* getGround();
+			std::string getGroundString();
+
+			// Sky
+			Mesh* getSky();
+			std::string getSkyString();
+
+			// Lives
+			Mesh* getLife1();
+			std::string getLife1String();
+			Mesh* getLife2();
+			std::string getLife2String();
+			Mesh* getLife3();
+			std::string getLife3String();
+
+			// Bullets
+			Mesh* getBullet1();
+			std::string getBullet1String();
+			Mesh* getBullet2();
+			std::string getBullet2String();
+			Mesh* getBullet3();
+			std::string getBullet3String();
 	};
 };
 
