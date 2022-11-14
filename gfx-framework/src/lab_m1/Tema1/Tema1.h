@@ -44,7 +44,7 @@ namespace m1
         int ducksWantedToKill = 15;
         int ducksKilled = 0;
         float progressBarIncrementStatus = 0.0f;
-        float duckSpeedIncrease = 250.0f;
+        float duckSpeedIncrease = 200.0f;
         bool pauseGame = false;
         bool duckDead = false;
     };

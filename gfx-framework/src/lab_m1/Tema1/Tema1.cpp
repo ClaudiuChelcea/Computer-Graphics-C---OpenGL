@@ -28,7 +28,7 @@ void Tema1::Init()
 
     // Create list of spawnpoints
     for (int yPos = 50; yPos <= 100; yPos = yPos + 10) {
-        for (int xPos = 50; xPos <= 1000; xPos = xPos + 25) {
+        for (int xPos = 50; xPos <= 600; xPos = xPos + 25) {
             my_duck_manager.getSpawnPoints().push_back(std::make_pair(xPos, yPos));
         }
     }
@@ -381,6 +381,8 @@ void Tema1::Update(float deltaTimeSeconds)
     body_part = glm::mat3(1);
     body_part = transform2D::Translate(0.0f, 300.0f);
     RenderMesh2D(meshes[my_UI.getSkyString()], shaders["VertexColor"], body_part);
+
+    std::cout << "trX: " << my_duck_manager.getDuckAlive()->getTranslateX() << " trY: " << my_duck_manager.getDuckAlive()->getTranslateY() << std::endl;
 }
 
 void Tema1::FrameEnd()
@@ -422,7 +424,7 @@ void Tema1::OnMouseBtnPress(int mouseX, int mouseY, int button, int mods)
     // And if the duck is not evading
     // And if the duck is above the ground
     if (my_duck_manager.getDuckAlive()->getBulletsCount() > 0 && my_duck_manager.getDuckAlive()->getEvading() == false
-        && mouseY <= 720 - 300 && pauseGame == false && duckDead == false) {
+        && mouseY <= 720 - 300 && pauseGame == false && duckDead == false && my_duck_manager.getDuckAlive()->getWasShot() == false) {
         // Reduce the number of bullets (if the duck was not shot already)
         if(my_duck_manager.getDuckAlive()->getWasShot() == false)
             my_duck_manager.getDuckAlive()->setBulletsCount(my_duck_manager.getDuckAlive()->getBulletsCount() - 1);
