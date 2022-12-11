@@ -4,22 +4,25 @@
 #include "components/transform.h"
 
 
+#define ANGLE_SPEEDUP (30.f)
+
 namespace m1
 {
     class Lab8 : public gfxc::SimpleScene
     {
-     public:
+    public:
         Lab8();
         ~Lab8();
 
         void Init() override;
 
-     private:
+    private:
         void FrameStart() override;
         void Update(float deltaTimeSeconds) override;
         void FrameEnd() override;
 
-        void RenderSimpleMesh(Mesh *mesh, Shader *shader, const glm::mat4 &modelMatrix, const glm::vec3 &color = glm::vec3(1));
+        void RenderSimpleMesh(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix, const glm::vec3& color = glm::vec3(1));
+        void RenderSimpleMesh2(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix, const glm::vec3& color = glm::vec3(1));
 
         void OnInputUpdate(float deltaTime, int mods) override;
         void OnKeyPress(int key, int mods) override;
@@ -37,6 +40,20 @@ namespace m1
         float materialKs;
 
         // TODO(student): If you need any other class variables, define them here.
+        GLint typeOfLight;
+        GLfloat angleOX, angleOY;
+        GLfloat cutoffAngle;
+
+        glm::vec3 lightPosition2;
+        glm::vec3 lightDirection2;
+        unsigned int materialShininess2;
+        float materialKd2;
+        float materialKs2;
+
+        // TODO(student): If you need any other class variables, define them here.
+        GLint typeOfLight2;
+        GLfloat angleOX2, angleOY2;
+        GLfloat cutoffAngle2;
 
     };
 }   // namespace m1
