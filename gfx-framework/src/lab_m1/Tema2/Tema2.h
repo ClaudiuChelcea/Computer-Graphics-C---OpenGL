@@ -3,8 +3,12 @@
 #include "components/simple_scene.h"
 #include "Camera.h"
 #include "CarEnemy.h"
+#include "CarPlayer.h"
 #include "MyRectangle.h"
 #include "transform3D.h"
+
+#define Z_FAR		(225.f)
+#define Z_NEAR		(.01f)
 
 namespace m1
 {
@@ -33,7 +37,7 @@ namespace m1
         void FrameStart() override;
         void Update(float deltaTimeSeconds) override;
         void FrameEnd() override;
-        void RenderMesh(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix, implement::Camera* cam);
+        void RenderMesh(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix, implement::Camera* minimap);
         void OnInputUpdate(float deltaTime, int mods) override;
         void OnKeyPress(int key, int mods) override;
         void OnKeyRelease(int key, int mods) override;
@@ -45,9 +49,7 @@ namespace m1
         void RenderScene(implement::Camera* camera);
 
         // New methids
-        double CalculateArea(glm::vec3 A, glm::vec3 B, glm::vec3 C);
-        bool InsideTriangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 P);
-        bool InsidePath(glm::vec3 P);
+        bool CheckIfPointIsInsidePath(glm::vec3 PATH);
        
     protected:
         // Enemies
@@ -98,36 +100,52 @@ namespace m1
         // Rectangle
         MyRectangle myRectangle;
 
-      //  Enemy enemy_2 = 
-      ////  Enemy enemy_3 = 
-        glm::vec3 points[71];
-        glm::vec3 pointsRed[71];
-        glm::vec3 pointsBlue[71];
-        glm::vec3 pointsRedOb1[71];
-        glm::vec3 pointsBlueOb1[71];
-        glm::vec3 carCenter = glm::vec3(0.25, 0, 0.25);
-        float distRed = 0.5, distBlue = 1;
-        float distRedOb1 = 0.4, distBlueOb1 = 0.9;
-        glm::vec3 UP = glm::vec3(0, 1, 0);
-        implement::Camera* camera, * cam;
-        float rotation_angle_OY = 0;
-        float rotation_obstacle = 0;
+        // Points
+        glm::vec3 MainPoints[71];
+        glm::vec3 RedPoints[71];
+        glm::vec3 BluePoints[71];
+        glm::vec3 RedPath[71];
+        glm::vec3 BluePath[71];
+        float DistanceToRedPath = 0.5;
+        float DistanceToBluePath = 1;
+        float DistToRed = 0.4;
+        float DistToBlue = 0.9;
+
+        /* 
+            Player
+            * speed
+            * car center,
+            * offset
+            * speed reducer
+            * new coords if collision with border
+            * translation
+            * rotation angle
+            * color
+        */
+        CarPlayer myPlayer =
+        {
+            25.0f,
+            { 0.25f, 0.0f, 0.25f },
+            0.25f,
+            4.0f,
+            { 0.0f, 0.0f },
+            { 0.0f, 0.0f, 0.0f },
+            0.0f,
+            { 0.5f, 0.5f, 0.75f }
+        };
+
+        // Camera
+        implement::Camera* camera = new implement::Camera(); // main camera
+        implement::Camera *minimap = new implement::Camera(); // minimap
         glm::mat4 projectionMatrix;
-        glm::mat4 projectionMat;
-        bool renderCameraTarget;
-        float initialCamOX = 0, initialCamOY = 0, initialCamOZ = 0;
-        float translateX = 0, translateY = 0, translateZ = 0, trX = 0, trZ = 0;
-        GLfloat fov;
-        float orthoRight = 8.0f, orthoUp = 4.5f, orthoDown = -4.5f, orthoLeft = -8.0f;
-        bool projectionType;
+
+        // Axis
+        glm::vec3 UP = glm::vec3(0, 1, 0);
+        
+        // Computation
         glm::mat4 modelMatrix = glm::mat4(1);
+
+        // Viewport
         Viewport miniViewport;
-        bool isOrto = false;
-        glm::vec3 posObs1;
-        glm::vec3 posObs2;
-        glm::vec3 posObs3;
-        float trOb1X = 0, trOb1Y = 0;
-        float tx = 0, ty = 0;
-        int indOb1 = 0, indOb2 = 0, indOb3 = 0;
     };
 } 
