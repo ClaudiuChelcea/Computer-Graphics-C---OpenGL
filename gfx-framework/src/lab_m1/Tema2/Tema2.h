@@ -2,6 +2,9 @@
 
 #include "components/simple_scene.h"
 #include "Camera.h"
+#include "CarEnemy.h"
+#include "MyRectangle.h"
+#include "transform3D.h"
 
 namespace m1
 {
@@ -12,27 +15,25 @@ namespace m1
         ~Tema2();
 
         bool isOrtho = false;
-
         void Init() override;
-        struct ViewportArea
+
+        struct Viewport
         {
-            ViewportArea() : x(0), y(0), width(1), height(1) {}
-            ViewportArea(int x, int y, int width, int height)
+            Viewport() : x(0), y(0), width(1), height(1) {}
+            Viewport(int x, int y, int width, int height)
                 : x(x), y(y), width(width), height(height) {}
-            int x;
-            int y;
             int width;
             int height;
+
+            int x;
+            int y;
         };
 
     private:
         void FrameStart() override;
         void Update(float deltaTimeSeconds) override;
         void FrameEnd() override;
-
         void RenderMesh(Mesh* mesh, Shader* shader, const glm::mat4& modelMatrix, implement::Camera* cam);
-
-
         void OnInputUpdate(float deltaTime, int mods) override;
         void OnKeyPress(int key, int mods) override;
         void OnKeyRelease(int key, int mods) override;
@@ -42,11 +43,63 @@ namespace m1
         void OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY) override;
         void OnWindowResize(int width, int height) override;
         void RenderScene(implement::Camera* camera);
+
+        // New methids
         double CalculateArea(glm::vec3 A, glm::vec3 B, glm::vec3 C);
         bool InsideTriangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 P);
         bool InsidePath(glm::vec3 P);
        
     protected:
+        // Enemies
+        /*
+        Enemy
+        * Position
+        * Color
+        * Ground offset
+        * Fill rate
+        * Speed
+        * Trajectory offset
+        * Object name
+        * Start index
+        */
+        CarEnemy enemy_1 = {
+            {0.0f, 0.0f, 0.0f},
+            {0.0f, 0.0f, 0.0f}, 
+            {0.0f, 0.2f, 0.0f}, 
+            0.0f,
+            10.0f,
+            -0.7f,
+            "obstacle1",
+            0
+        };
+
+        CarEnemy enemy_2 = {
+            {0.0f, 0.0f, 0.0f},
+            {0.0f, 1.0f, 1.0f},
+            {0.0f, 0.2f, 0.0f},
+            0.0f,
+            25.0f,
+            0.0f,
+            "obstacle2",
+            0
+        };
+
+        CarEnemy enemy_3 = {
+            {0.0f, 0.0f, 0.0f},
+            {1.0f, 0.0f, 1.0f},
+            {0.0f, 0.2f, 0.0f},
+            0.0f,
+            50.0f,
+            0.5f,
+            "obstacle3",
+            0
+        };
+
+        // Rectangle
+        MyRectangle myRectangle;
+
+      //  Enemy enemy_2 = 
+      ////  Enemy enemy_3 = 
         glm::vec3 points[71];
         glm::vec3 pointsRed[71];
         glm::vec3 pointsBlue[71];
@@ -68,7 +121,7 @@ namespace m1
         float orthoRight = 8.0f, orthoUp = 4.5f, orthoDown = -4.5f, orthoLeft = -8.0f;
         bool projectionType;
         glm::mat4 modelMatrix = glm::mat4(1);
-        ViewportArea miniViewportArea;
+        Viewport miniViewport;
         bool isOrto = false;
         glm::vec3 posObs1;
         glm::vec3 posObs2;
